@@ -13,9 +13,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.LaursenJessen.bikeshare.components.LoggedIn
 import com.LaursenJessen.bikeshare.components.authentication.Login
 import com.LaursenJessen.bikeshare.components.authentication.Signup
+import com.LaursenJessen.bikeshare.components.home.HomeScreen
+import com.LaursenJessen.bikeshare.components.rentbike.RentBikeMain
+import com.LaursenJessen.bikeshare.components.rentoutbike.RentOutBikeMain
+import com.LaursenJessen.bikeshare.components.rentoutbike.addbikes.AddBikeView
+import com.LaursenJessen.bikeshare.components.rentoutbike.addbikestrava.AddBikeFromStravaView
+import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.MyBikesMain
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.LaursenJessen.bikeshare.ui.theme.BikeShareTheme
 import com.google.firebase.FirebaseApp
@@ -38,9 +43,14 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     NavHost(navController = navController, startDestination = "Login") {
-                        composable("LoggedIn") { LoggedIn(nav = navController) }
                         composable("Signup") { Signup(service, nav = navController) }
                         composable("Login") { Login(service, nav = navController) }
+                        composable("HomeScreen") { HomeScreen(nav = navController) }
+                        composable("RentBikeView") { RentBikeMain(nav = navController) }
+                        composable("RentOutBikeView") { RentOutBikeMain(nav = navController) }
+                        composable("MyBikesView") { MyBikesMain(nav = navController) }
+                        composable("AddBike") { AddBikeView(nav = navController) }
+                        composable("AddBikeStrava") { AddBikeFromStravaView(nav = navController) }
                     }
                 }
             }
