@@ -2,14 +2,38 @@ package com.LaursenJessen.bikeshare.firestore
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class FireStore(private val auth: FirebaseAuth) {
+class FireStore(private val storage: FirebaseStorage, private val api: FirebaseFirestore, val auth: FirebaseAuth) {
     companion object {
         const val TAG = "FIRE_STORE_SERVICE"
     }
-
+    suspend fun getBikes(): List<Bike> {
+        return suspendCoroutine { continuation ->
+            api.collection("Bikes")
+                .get()
+                .addOnSuccessListener {
+                    val bikes =
+                        it.documents.map { d -> Bike(
+                            d.id,
+                            d.data?.get("Address").toString(),
+                            d.data?.get("Description").toString(),
+                            d.data?.get("Manufacturer").toString(),
+                            d.data?.get("Model").toString(),
+                            d.data?.get("RentedOut").toString().toBoolean(),
+                            d.data?.get("UserId").toString(),
+                            d.data?.get("ImageUrl").toString())
+                            }
+                    continuation.resume(bikes)
+                }.addOnFailureListener {
+                    Log.v(TAG, "We failed $it")
+                    throw it
+                }
+        }
+    }
     suspend fun signup(email: String, password: String) {
         suspendCoroutine { continuation ->
             auth.createUserWithEmailAndPassword(email, password)
