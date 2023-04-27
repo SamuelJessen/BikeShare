@@ -66,7 +66,7 @@ fun Signup(service: FireStore, nav: NavController) {
                     try {
                         if (password.value == confirmPassword.value) {
                             val user = service.signup(email.value, password.value)
-                            nav.navigate("LoggedIn")
+                            nav.navigate("HomeScreen")
                         } else {
                             // Handle password mismatch error
                         }
