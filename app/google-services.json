@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "595387665326",
+    "project_id": "bikeshare-7a713",
+    "storage_bucket": "bikeshare-7a713.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595387665326:android:ee9cb8884f6ca80409563f",
+        "android_client_info": {
+          "package_name": "com.LaursenJessen.bikeshare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "595387665326-3uif4bagllelprsa4qfch8aqsa6r0sh3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWoxqI0EbolSXEae8dzxP-bRE35oido3A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "595387665326-3uif4bagllelprsa4qfch8aqsa6r0sh3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
