@@ -1,20 +1,22 @@
 package com.LaursenJessen.bikeshare
 
+
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.runtime.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.LaursenJessen.bikeshare.components.authentication.Login
 import com.LaursenJessen.bikeshare.components.authentication.Signup
+import com.LaursenJessen.bikeshare.components.drawermenu.DrawerMenuHeader
+import com.LaursenJessen.bikeshare.components.drawermenu.menuitems.getMenuItems
+import com.LaursenJessen.bikeshare.components.drawermenu.models.DrawerMenuItem
 import com.LaursenJessen.bikeshare.components.home.HomeScreen
 import com.LaursenJessen.bikeshare.components.rentbike.RentBikeMain
 import com.LaursenJessen.bikeshare.components.rentoutbike.RentOutBikeMain
@@ -26,47 +28,65 @@ import com.LaursenJessen.bikeshare.ui.theme.BikeShareTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    private var isLoggedIn by mutableStateOf(false)
+
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val auth = Firebase.auth
-        FirebaseApp.initializeApp(this);
-        val service = FireStore(auth)
-        auth.currentUser
+        FirebaseApp.initializeApp(this)
+        val service = FireStore(auth) { isLoggedIn = it }
+        val currentUser = auth.currentUser
+        isLoggedIn = currentUser != null
         setContent {
-            BikeShareTheme {
+            BikeShareTheme() {
                 val navController = rememberNavController()
+                val scaffoldState = rememberScaffoldState()
+                val scope = rememberCoroutineScope()
+                val menuItems = getMenuItems(navController)
+                val startDestination = if (isLoggedIn) "HomeScreen" else "Login"
 
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    NavHost(navController = navController, startDestination = "Login") {
-                        composable("Signup") { Signup(service, nav = navController) }
-                        composable("Login") { Login(service, nav = navController) }
-                        composable("HomeScreen") { HomeScreen(nav = navController) }
-                        composable("RentBikeView") { RentBikeMain(nav = navController) }
-                        composable("RentOutBikeView") { RentOutBikeMain(nav = navController) }
-                        composable("MyBikesView") { MyBikesMain(nav = navController) }
-                        composable("AddBike") { AddBikeView(nav = navController) }
-                        composable("AddBikeStrava") { AddBikeFromStravaView(nav = navController) }
+                Scaffold(
+                    scaffoldState = scaffoldState,
+                    topBar = {
+                        TopAppBar(
+                            title = { Text(text = "Bike Share App") },
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    scope.launch { scaffoldState.drawerState.open() }
+                                }) {
+                                    Icon(Icons.Default.Menu, contentDescription = null)
+                                }
+                            }
+                        )
+                    },
+                    drawerContent = {
+                        DrawerMenuHeader()
+                        DrawerMenuItem(menuItems)
+                    },
+                    content = {
+
+                        NavHost(
+                            navController = navController,
+                            startDestination = startDestination
+                        ) {
+                            composable("HomeScreen") { HomeScreen(nav = navController) }
+                            composable("Login") { Login(service, nav = navController) }
+                            composable("Signup") { Signup(service, nav = navController) }
+                            composable("HomeScreen") { HomeScreen(nav = navController) }
+                            composable("RentBikeView") { RentBikeMain(nav = navController) }
+                            composable("RentOutBikeView") { RentOutBikeMain(nav = navController) }
+                            composable("MyBikesView") { MyBikesMain(nav = navController) }
+                            composable("AddBike") { AddBikeView(nav = navController) }
+                            composable("AddBikeStrava") { AddBikeFromStravaView(nav = navController) }
+                        }
                     }
-                }
+                )
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    BikeShareTheme {
-        Greeting("Android")
-    }
-}

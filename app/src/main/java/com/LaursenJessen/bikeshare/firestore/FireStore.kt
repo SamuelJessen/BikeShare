@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class FireStore(private val auth: FirebaseAuth) {
+class FireStore(private val auth: FirebaseAuth, private val isLoggedInChanged: (Boolean) -> Unit) {
     companion object {
         const val TAG = "FIRE_STORE_SERVICE"
     }
@@ -19,6 +19,7 @@ class FireStore(private val auth: FirebaseAuth) {
                         val user = auth.currentUser ?: throw Exception("Something wrong")
                         val signedInUser = user.email?.let { User(user.providerId, it) }
                             ?: throw Exception("createUserWithEmail:$email failure")
+                        isLoggedInChanged(true)
                         continuation.resume(signedInUser)
                     } else {
                         Log.w(TAG, "createUserWithEmail:failure", task.exception)
@@ -36,6 +37,7 @@ class FireStore(private val auth: FirebaseAuth) {
                         val user = auth.currentUser ?: throw Exception("Something wrong")
                         val signedInUser = user.email?.let { User(user.providerId, it) }
                             ?: throw Exception("createUserWithEmail:$email failure")
+                        isLoggedInChanged(true)
                         continuation.resume(signedInUser)
                     } else {
                         Log.w(TAG, "createUserWithEmail:failure", task.exception)
