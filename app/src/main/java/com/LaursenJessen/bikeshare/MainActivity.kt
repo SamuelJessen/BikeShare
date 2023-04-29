@@ -18,6 +18,7 @@ import com.LaursenJessen.bikeshare.components.rentoutbike.RentOutBikeMain
 import com.LaursenJessen.bikeshare.components.rentoutbike.addbikes.AddBikeView
 import com.LaursenJessen.bikeshare.components.rentoutbike.addbikestrava.AddBikeFromStravaView
 import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.MyBikesMain
+import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.mybike.EditBikeView
 import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.mybike.MyBikeView
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.LaursenJessen.bikeshare.ui.theme.BikeShareTheme
@@ -53,6 +54,7 @@ class MainActivity : ComponentActivity() {
                         composable("AddBike") { AddBikeView(nav = navController) }
                         composable("AddBikeStrava") { AddBikeFromStravaView(nav = navController) }
                         composable("MyBikeView") { MyBikeView(nav = navController)}
+                        composable("EditBikeView") { EditBikeView(nav = navController)}
                     }
                 }
             }

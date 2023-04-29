@@ -1,15 +1,14 @@
 package com.LaursenJessen.bikeshare.components.rentoutbike.mybikes
 
+import android.media.MediaDrm.LogMessage
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,11 +27,43 @@ fun MyBikesMain(service: FireStore, nav: NavController) {
         val list = service.getBikes()
         bikes.value = list
     }
-    Column {
+    var expanded by remember { mutableStateOf(false) }
+    Column() {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = "My Bikes",
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.padding(16.dp)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            IconButton(
+                onClick = { expanded = true }
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = "Add")
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                DropdownMenuItem(onClick = {
+                    nav.navigate("AddBike")
+                    expanded = false
+                }) {
+                    Text(text = "Add bike manually")
+                }
+                DropdownMenuItem(onClick = {
+                    nav.navigate("AddBikeStrava")
+                    expanded = false
+                }) {
+                    Text(text = "Add bike with Strava")
+                }
+            }
+        }
         val bikesForUser = bikes.value.filter{it.userId == service.auth.uid}
         bikesForUser.map {
             BikeListItem(it, nav)
-        }
+    }
     }
 }
 
@@ -42,7 +73,7 @@ fun BikeListItem(bike: Bike,nav: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
-            .clickable(onClick = {nav.navigate("MyBikeItem")}),
+            .clickable(onClick = { nav.navigate("MyBikeView") }),
         shape = MaterialTheme.shapes.medium,
         elevation = 4.dp,
     ) {
@@ -50,7 +81,7 @@ fun BikeListItem(bike: Bike,nav: NavController) {
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(bike.imageUrl)
+            val storageRef = bike.imageUrl
             Image(
                 painter = rememberImagePainter(storageRef),
                 contentDescription = "Bike image",
@@ -60,7 +91,7 @@ fun BikeListItem(bike: Bike,nav: NavController) {
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
-                text = bike.manufacturer + bike.model,
+                text = bike.manufacturer + " "+ bike.model,
                 textAlign = TextAlign.Center,
             )
         }
