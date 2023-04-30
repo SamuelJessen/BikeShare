@@ -8,12 +8,37 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
-class FireStore(private val auth: FirebaseAuth, private val isLoggedInChanged: (Boolean) -> Unit) {
+
+class FireStore(private val storage: FirebaseStorage, private val api: FirebaseFirestore, val auth: FirebaseAuth, private val isLoggedInChanged: (Boolean) -> Unit) {
     companion object {
         const val TAG = "FIRE_STORE_SERVICE"
     }
-
+    suspend fun getBikes(): List<Bike> {
+        return suspendCoroutine { continuation ->
+            api.collection("Bikes")
+                .get()
+                .addOnSuccessListener {
+                    val bikes =
+                        it.documents.map { d -> Bike(
+                            d.id,
+                            d.data?.get("Address").toString(),
+                            d.data?.get("Description").toString(),
+                            d.data?.get("Manufacturer").toString(),
+                            d.data?.get("Model").toString(),
+                            d.data?.get("RentedOut").toString().toBoolean(),
+                            d.data?.get("UserId").toString(),
+                            d.data?.get("ImageUrl").toString())
+                            }
+                    continuation.resume(bikes)
+                }.addOnFailureListener {
+                    Log.v(TAG, "We failed $it")
+                    throw it
+                }
+        }
+    }
     suspend fun signup(email: String, password: String) {
         suspendCoroutine { continuation ->
             auth.createUserWithEmailAndPassword(email, password)

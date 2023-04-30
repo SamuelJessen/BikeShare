@@ -13,8 +13,10 @@ import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.LaursenJessen.bikeshare.ui.theme.BikeShareTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.LaursenJessen.bikeshare.components.navigation.AppNavigation
+import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : ComponentActivity() {
     private val authViewModel by viewModels<AuthenticationViewModel>()
@@ -22,8 +24,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val auth = Firebase.auth
+        val api = FirebaseFirestore.getInstance()
+        val storage = FirebaseStorage.getInstance()
         FirebaseApp.initializeApp(this)
-        val service = FireStore(auth) { auth.currentUser != null }
+        val service = FireStore(storage, api, auth) { auth.currentUser != null }
         setContent {
             BikeShareTheme() {
                 AppNavigation(authViewModel, service, auth)
@@ -31,9 +35,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-
-
-
-
