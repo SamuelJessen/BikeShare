@@ -1,11 +1,7 @@
 package com.LaursenJessen.bikeshare.firestore
 
 import android.util.Log
-import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import com.google.firebase.firestore.FirebaseFirestore
@@ -67,11 +63,10 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                             ?: throw Exception("createUserWithEmail:$email failure")
                         continuation.resume(signedInUser)
                     } else {
-                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        throw throw Exception("createUserWithEmail: $email failure", task.exception)
+                        Log.w(TAG, "loginUserWithEmail:failure", task.exception)
+                        throw throw Exception("loginUserWithEmail: $email failure", task.exception)
                     }
                 }
         }
     }
-
 }
