@@ -21,8 +21,8 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                             d.id,
                             d.data?.get("Address").toString(),
                             d.data?.get("Description").toString(),
-                            d.data?.get("Manufacturer").toString(),
-                            d.data?.get("Model").toString(),
+                            d.data?.get("Name").toString(),
+                            d.data?.get("Distance").toString().toFloat(),
                             d.data?.get("RentedOut").toString().toBoolean(),
                             d.data?.get("UserId").toString(),
                             d.data?.get("ImageUrl").toString())
@@ -33,6 +33,25 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                     throw it
                 }
         }
+    }
+    suspend fun addBike(bike: Bike) {
+        api.collection("Bikes").document(bike.id)
+            .set(mapOf(
+                "Address" to bike.address,
+                "Description" to bike.description,
+                "Name" to bike.name,
+                "Distance" to bike.distance,
+                "RentedOut" to bike.rentedOut,
+                "UserId" to bike.userId,
+                "ImageUrl" to bike.imageUrl
+            ))
+            .addOnSuccessListener {
+                Log.d(TAG, "Bike added successfully")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding bike", e)
+                throw e
+            }
     }
     suspend fun signup(email: String, password: String) {
         suspendCoroutine { continuation ->
