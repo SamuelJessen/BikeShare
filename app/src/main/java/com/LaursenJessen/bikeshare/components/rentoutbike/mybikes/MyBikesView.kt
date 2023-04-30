@@ -21,7 +21,7 @@ import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.google.firebase.storage.FirebaseStorage
 
 @Composable
-fun MyBikesMain(service: FireStore, nav: NavController) {
+fun MyBikesView(service: FireStore, nav: NavController) {
     val bikes = remember { mutableStateOf(emptyList<Bike>()) }
     LaunchedEffect(Unit){
         val list = service.getBikes()
@@ -91,7 +91,7 @@ fun BikeListItem(bike: Bike,nav: NavController) {
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
-                text = bike.manufacturer + " "+ bike.model,
+                text = bike.name,
                 textAlign = TextAlign.Center,
             )
         }

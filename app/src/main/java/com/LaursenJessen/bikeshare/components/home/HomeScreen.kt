@@ -13,8 +13,8 @@ fun HomeScreen(nav: NavController) {
         Button(onClick = { nav.navigate("RentBikeView") }) {
             Text(text = "Rent Bike")
         }
-        Button(onClick = { nav.navigate("RentOutBikeView") }) {
-            Text(text = "Rent Out Bike")
+        Button(onClick = { nav.navigate("MyBikesView") }) {
+            Text(text = "Rent Out Bike/My bikes")
         }
     }
 }

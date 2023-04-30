@@ -14,10 +14,9 @@ import com.LaursenJessen.bikeshare.components.authentication.Login
 import com.LaursenJessen.bikeshare.components.authentication.Signup
 import com.LaursenJessen.bikeshare.components.home.HomeScreen
 import com.LaursenJessen.bikeshare.components.rentbike.RentBikeMain
-import com.LaursenJessen.bikeshare.components.rentoutbike.RentOutBikeMain
 import com.LaursenJessen.bikeshare.components.rentoutbike.addbikes.AddBikeView
 import com.LaursenJessen.bikeshare.components.rentoutbike.addbikestrava.AddBikeFromStravaView
-import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.MyBikesMain
+import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.MyBikesView
 import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.mybike.EditBikeView
 import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.mybike.MyBikeView
 import com.LaursenJessen.bikeshare.firestore.FireStore
@@ -49,9 +48,8 @@ class MainActivity : ComponentActivity() {
                         composable("Login") { Login(service, nav = navController) }
                         composable("HomeScreen") { HomeScreen(nav = navController) }
                         composable("RentBikeView") { RentBikeMain(nav = navController) }
-                        composable("RentOutBikeView") { RentOutBikeMain(nav = navController) }
-                        composable("MyBikesView") { MyBikesMain(service, nav = navController) }
-                        composable("AddBike") { AddBikeView(nav = navController) }
+                        composable("MyBikesView") { MyBikesView(service, nav = navController) }
+                        composable("AddBike") { AddBikeView(service, nav = navController) }
                         composable("AddBikeStrava") { AddBikeFromStravaView(nav = navController) }
                         composable("MyBikeView") { MyBikeView(nav = navController)}
                         composable("EditBikeView") { EditBikeView(nav = navController)}
