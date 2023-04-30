@@ -17,6 +17,9 @@ fun getMenuItems(navController: NavController): List<DrawerMenuItemModel> {
         DrawerMenuItemModel("2", "Add bike", Icons.Rounded.Add, "AddBikeMenu") {
             navController.navigate("AddBike")
         },
+        DrawerMenuItemModel("3", "Logout", Icons.Rounded.ArrowBack, "Logout") {
+            navController.navigate("Login")
+        },
     )
 }
 

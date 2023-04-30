@@ -18,8 +18,8 @@ import com.LaursenJessen.bikeshare.components.drawermenu.DrawerMenuHeader
 import com.LaursenJessen.bikeshare.components.drawermenu.menuitems.getMenuItems
 import com.LaursenJessen.bikeshare.components.drawermenu.models.DrawerMenuItem
 import com.LaursenJessen.bikeshare.components.home.HomeScreen
-import com.LaursenJessen.bikeshare.components.rentbike.RentBikeMain
-import com.LaursenJessen.bikeshare.components.rentoutbike.RentOutBikeMain
+import com.LaursenJessen.bikeshare.components.rentbike.RentBikeView
+import com.LaursenJessen.bikeshare.components.rentoutbike.RentOutBikeView
 import com.LaursenJessen.bikeshare.components.rentoutbike.addbikes.AddBikeView
 import com.LaursenJessen.bikeshare.components.rentoutbike.addbikestrava.AddBikeFromStravaView
 import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.MyBikesMain
@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val auth = Firebase.auth
+        auth.signOut()
         FirebaseApp.initializeApp(this)
         val service = FireStore(auth) { isLoggedIn = it }
         val currentUser = auth.currentUser
@@ -47,13 +48,12 @@ class MainActivity : ComponentActivity() {
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
                 val menuItems = getMenuItems(navController)
-                val startDestination = if (isLoggedIn) "HomeScreen" else "Login"
 
                 Scaffold(
                     scaffoldState = scaffoldState,
                     topBar = {
                         TopAppBar(
-                            title = { Text(text = "Bike Share App") },
+                            title = { Text(text = "BikeShare") },
                             navigationIcon = {
                                 IconButton(onClick = {
                                     scope.launch { scaffoldState.drawerState.open() }
@@ -68,17 +68,15 @@ class MainActivity : ComponentActivity() {
                         DrawerMenuItem(menuItems)
                     },
                     content = {
-
                         NavHost(
                             navController = navController,
-                            startDestination = startDestination
+                            startDestination = if (isLoggedIn) "HomeScreen" else "Login"
                         ) {
                             composable("HomeScreen") { HomeScreen(nav = navController) }
                             composable("Login") { Login(service, nav = navController) }
                             composable("Signup") { Signup(service, nav = navController) }
-                            composable("HomeScreen") { HomeScreen(nav = navController) }
-                            composable("RentBikeView") { RentBikeMain(nav = navController) }
-                            composable("RentOutBikeView") { RentOutBikeMain(nav = navController) }
+                            composable("RentBikeView") { RentBikeView(nav = navController) }
+                            composable("RentOutBikeView") { RentOutBikeView(nav = navController) }
                             composable("MyBikesView") { MyBikesMain(nav = navController) }
                             composable("AddBike") { AddBikeView(nav = navController) }
                             composable("AddBikeStrava") { AddBikeFromStravaView(nav = navController) }
@@ -89,4 +87,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 

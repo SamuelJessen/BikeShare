@@ -59,7 +59,9 @@ fun Login(service: FireStore, nav: NavController) {
             onClick = {
                 scope.launch {
                     val user = service.login(email.value, password.value)
-                    nav.navigate("HomeScreen")
+                    nav.navigate(
+                        "HomeScreen"
+                    )
                 }
             },
             modifier = Modifier.fillMaxWidth()
