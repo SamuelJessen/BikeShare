@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 
 @Composable
-fun MyBikesMain(nav: NavController) {
+fun MyBikesView(nav: NavController) {
     Column() {
         Text("MyBikesMain with list")
     }

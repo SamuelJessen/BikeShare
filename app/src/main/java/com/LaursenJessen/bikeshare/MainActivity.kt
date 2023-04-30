@@ -5,88 +5,35 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.LaursenJessen.bikeshare.components.authentication.Login
-import com.LaursenJessen.bikeshare.components.authentication.Signup
-import com.LaursenJessen.bikeshare.components.authentication.authnav.authenticatedComposable
-import com.LaursenJessen.bikeshare.components.drawermenu.DrawerMenuHeader
-import com.LaursenJessen.bikeshare.components.drawermenu.menuitems.getMenuItems
-import com.LaursenJessen.bikeshare.components.drawermenu.models.DrawerMenuItem
-import com.LaursenJessen.bikeshare.components.home.HomeScreen
-import com.LaursenJessen.bikeshare.components.rentbike.RentBikeView
-import com.LaursenJessen.bikeshare.components.rentoutbike.RentOutBikeView
-import com.LaursenJessen.bikeshare.components.rentoutbike.addbikes.AddBikeView
-import com.LaursenJessen.bikeshare.components.rentoutbike.addbikestrava.AddBikeFromStravaView
-import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.MyBikesMain
+import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.LaursenJessen.bikeshare.ui.theme.BikeShareTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.launch
+import com.LaursenJessen.bikeshare.components.navigation.AppNavigation
 
 class MainActivity : ComponentActivity() {
-    private var isLoggedIn by mutableStateOf(false)
-
+    private val authViewModel by viewModels<AuthenticationViewModel>()
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val auth = Firebase.auth
-        auth.signOut()
         FirebaseApp.initializeApp(this)
-        val service = FireStore(auth) { isLoggedIn = it }
-        val currentUser = auth.currentUser
-        isLoggedIn = currentUser != null
+        val service = FireStore(auth) { auth.currentUser != null }
         setContent {
             BikeShareTheme() {
-                val navController = rememberNavController()
-                val scaffoldState = rememberScaffoldState()
-                val scope = rememberCoroutineScope()
-                val menuItems = getMenuItems(navController)
-
-                Scaffold(
-                    scaffoldState = scaffoldState,
-                    topBar = {
-                        TopAppBar(
-                            title = { Text(text = "BikeShare") },
-                            navigationIcon = {
-                                IconButton(onClick = {
-                                    scope.launch { scaffoldState.drawerState.open() }
-                                }) {
-                                    Icon(Icons.Default.Menu, contentDescription = null)
-                                }
-                            }
-                        )
-                    },
-                    drawerContent = {
-                        DrawerMenuHeader()
-                        DrawerMenuItem(menuItems, scaffoldState = scaffoldState, scope = scope)
-                    },
-                    content = {
-                        NavHost(
-                            navController = navController,
-                            startDestination = if (isLoggedIn) "HomeScreen" else "Login"
-                        ) {
-                            authenticatedComposable("HomeScreen", navController) { HomeScreen(nav = navController) }
-                            composable("Login") { Login(service, nav = navController) }
-                            composable("Signup") { Signup(service, nav = navController) }
-                            authenticatedComposable("RentBikeView", navController) { RentBikeView(nav = navController) }
-                            authenticatedComposable("RentOutBikeView", navController) { RentOutBikeView(nav = navController) }
-                            authenticatedComposable("MyBikesView", navController) { MyBikesMain(nav = navController) }
-                            authenticatedComposable("AddBike", navController) { AddBikeView(nav = navController) }
-                            authenticatedComposable("AddBikeStrava", navController) { AddBikeFromStravaView(nav = navController) }
-                        }
-                    }
-                )
+                AppNavigation(authViewModel, service, auth)
             }
         }
     }
 }
+
+
+
+
 
 

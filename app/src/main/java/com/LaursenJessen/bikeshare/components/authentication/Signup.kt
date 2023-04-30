@@ -1,28 +1,29 @@
 package com.LaursenJessen.bikeshare.components.authentication
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
 import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.google.firebase.auth.FirebaseAuthException
 import kotlinx.coroutines.launch
 
 @Composable
-fun Signup(service: FireStore, nav: NavController) {
+fun Signup(service: FireStore, nav: NavController, authViewModel: AuthenticationViewModel) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
+
+    var errorMessage by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,20 +65,20 @@ fun Signup(service: FireStore, nav: NavController) {
             onClick = {
                 scope.launch {
                     try {
-                        if (password.value == confirmPassword.value) {
-                            val user = service.signup(email.value, password.value)
-                            nav.navigate("HomeScreen")
-                        } else {
-                            // Handle password mismatch error
+                        val user = service.signup(email.value, password.value)
+                        authViewModel.setAuthenticated(true)
+                        nav.navigate("HomeScreen") {
+                            launchSingleTop = true
                         }
-                    } catch (e: FirebaseAuthException) {
-                        // Handle authentication error
+                    } catch (e: Exception) {
+                        Log.e("Signup", "Exception during signup", e)
+                        errorMessage = "Sign up failed: ${e.localizedMessage}"
                     }
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Sign up")
+            Text("Sign Up")
         }
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(

@@ -10,11 +10,11 @@ import com.google.firebase.ktx.Firebase
 fun NavGraphBuilder.authenticatedComposable(
     route: String,
     navController: NavController,
+    isAuthenticated: Boolean,
     content: @Composable () -> Unit
 ) {
     composable(route) {
-        val auth = Firebase.auth
-        if (auth.currentUser != null) {
+        if (isAuthenticated) {
             content()
         } else {
             val currentRoute = navController.currentBackStackEntry?.destination?.route

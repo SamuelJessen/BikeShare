@@ -11,11 +11,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import kotlinx.coroutines.launch
 
 @Composable
-fun Login(service: FireStore, nav: NavController) {
+fun Login(service: FireStore, nav: NavController, authViewModel: AuthenticationViewModel) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
@@ -29,6 +30,7 @@ fun Login(service: FireStore, nav: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Text(
             text = "Log in",
             style = MaterialTheme.typography.h4,
@@ -61,7 +63,10 @@ fun Login(service: FireStore, nav: NavController) {
                 scope.launch {
                     try {
                         val user = service.login(email.value, password.value)
-                        nav.navigate("HomeScreen")
+                        authViewModel.setAuthenticated(true)
+                        nav.navigate("HomeScreen") {
+                            launchSingleTop = true
+                        }
                     } catch (e: Exception) {
                         Log.e("Login", "Exception during login", e)
                         errorMessage = "Log in failed: ${e.localizedMessage}"
@@ -91,3 +96,4 @@ fun Login(service: FireStore, nav: NavController) {
         }
     }
 }
+

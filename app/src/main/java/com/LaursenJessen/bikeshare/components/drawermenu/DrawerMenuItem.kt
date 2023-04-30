@@ -31,7 +31,7 @@ fun DrawerMenuItem(
                     .fillMaxWidth()
                     .clickable {
                         item.onClick()
-                        scope.launch { scaffoldState.drawerState.close() }
+                        scope.launch { scaffoldState?.drawerState?.close() }
                     }
                     .padding(16.dp)
             ) {
