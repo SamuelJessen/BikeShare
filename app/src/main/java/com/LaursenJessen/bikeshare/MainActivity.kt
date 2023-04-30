@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.LaursenJessen.bikeshare.components.authentication.Login
 import com.LaursenJessen.bikeshare.components.authentication.Signup
+import com.LaursenJessen.bikeshare.components.authentication.authnav.authenticatedComposable
 import com.LaursenJessen.bikeshare.components.drawermenu.DrawerMenuHeader
 import com.LaursenJessen.bikeshare.components.drawermenu.menuitems.getMenuItems
 import com.LaursenJessen.bikeshare.components.drawermenu.models.DrawerMenuItem
@@ -65,21 +66,21 @@ class MainActivity : ComponentActivity() {
                     },
                     drawerContent = {
                         DrawerMenuHeader()
-                        DrawerMenuItem(menuItems)
+                        DrawerMenuItem(menuItems, scaffoldState = scaffoldState, scope = scope)
                     },
                     content = {
                         NavHost(
                             navController = navController,
                             startDestination = if (isLoggedIn) "HomeScreen" else "Login"
                         ) {
-                            composable("HomeScreen") { HomeScreen(nav = navController) }
+                            authenticatedComposable("HomeScreen", navController) { HomeScreen(nav = navController) }
                             composable("Login") { Login(service, nav = navController) }
                             composable("Signup") { Signup(service, nav = navController) }
-                            composable("RentBikeView") { RentBikeView(nav = navController) }
-                            composable("RentOutBikeView") { RentOutBikeView(nav = navController) }
-                            composable("MyBikesView") { MyBikesMain(nav = navController) }
-                            composable("AddBike") { AddBikeView(nav = navController) }
-                            composable("AddBikeStrava") { AddBikeFromStravaView(nav = navController) }
+                            authenticatedComposable("RentBikeView", navController) { RentBikeView(nav = navController) }
+                            authenticatedComposable("RentOutBikeView", navController) { RentOutBikeView(nav = navController) }
+                            authenticatedComposable("MyBikesView", navController) { MyBikesMain(nav = navController) }
+                            authenticatedComposable("AddBike", navController) { AddBikeView(nav = navController) }
+                            authenticatedComposable("AddBikeStrava", navController) { AddBikeFromStravaView(nav = navController) }
                         }
                     }
                 )
