@@ -19,7 +19,8 @@ import com.LaursenJessen.bikeshare.components.rentbike.RentBikeView
 import com.LaursenJessen.bikeshare.components.rentoutbike.RentOutBikeView
 import com.LaursenJessen.bikeshare.components.rentoutbike.addbikes.AddBikeView
 import com.LaursenJessen.bikeshare.components.rentoutbike.addbikestrava.AddBikeFromStravaView
-import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.MyBikesMain
+import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.MyBikesView
+import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.mybike.MyBikeView
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -43,16 +44,19 @@ fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, au
                 ScaffoldWithMenuContent(scaffoldState, scope, menuItems) { RentBikeView(nav = navController) }
             }
             authenticatedComposable("AddBike", navController, authViewModel.isAuthenticated) {
-                ScaffoldWithMenuContent(scaffoldState, scope, menuItems) { AddBikeView(nav = navController) }
+                ScaffoldWithMenuContent(scaffoldState, scope, menuItems) { AddBikeView(nav = navController, service = service) }
             }
             authenticatedComposable("RentOutBikeView", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(scaffoldState, scope, menuItems) { RentOutBikeView(nav = navController) }
             }
             authenticatedComposable("MyBikesView", navController, authViewModel.isAuthenticated) {
-                ScaffoldWithMenuContent(scaffoldState, scope, menuItems) { MyBikesMain(nav = navController, service = service) }
+                ScaffoldWithMenuContent(scaffoldState, scope, menuItems) { MyBikesView(nav = navController, service = service) }
             }
             authenticatedComposable("AddBikeStrava", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(scaffoldState, scope, menuItems) { AddBikeFromStravaView(nav = navController) }
+            }
+            authenticatedComposable("MyBikeView", navController, authViewModel.isAuthenticated) {
+                ScaffoldWithMenuContent(scaffoldState, scope, menuItems) { MyBikeView(nav = navController) }
             }
         }
     }
