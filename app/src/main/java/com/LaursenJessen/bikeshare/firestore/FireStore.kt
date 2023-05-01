@@ -2,12 +2,13 @@ package com.LaursenJessen.bikeshare.firestore
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
-class FireStore(private val storage: FirebaseStorage, private val api: FirebaseFirestore, val auth: FirebaseAuth) {
+
+class FireStore(private val storage: FirebaseStorage, private val api: FirebaseFirestore, val auth: FirebaseAuth, private val isLoggedInChanged: (Boolean) -> Unit) {
     companion object {
         const val TAG = "FIRE_STORE_SERVICE"
     }
@@ -81,8 +82,8 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                             ?: throw Exception("createUserWithEmail:$email failure")
                         continuation.resume(signedInUser)
                     } else {
-                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        throw throw Exception("createUserWithEmail: $email failure", task.exception)
+                        Log.w(TAG, "loginUserWithEmail:failure", task.exception)
+                        throw throw Exception("loginUserWithEmail: $email failure", task.exception)
                     }
                 }
         }

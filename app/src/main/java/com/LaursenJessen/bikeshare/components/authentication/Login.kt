@@ -1,29 +1,28 @@
 package com.LaursenJessen.bikeshare.components.authentication
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import kotlinx.coroutines.launch
 
 @Composable
-fun Login(service: FireStore, nav: NavController) {
+fun Login(service: FireStore, nav: NavController, authViewModel: AuthenticationViewModel) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
+
+    var errorMessage by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -31,6 +30,7 @@ fun Login(service: FireStore, nav: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Text(
             text = "Log in",
             style = MaterialTheme.typography.h4,
@@ -61,14 +61,23 @@ fun Login(service: FireStore, nav: NavController) {
         Button(
             onClick = {
                 scope.launch {
-                    val user = service.login(email.value, password.value)
-                    nav.navigate("HomeScreen")
+                    try {
+                        val user = service.login(email.value, password.value)
+                        authViewModel.setAuthenticated(true)
+                        nav.navigate("HomeScreen") {
+                            launchSingleTop = true
+                        }
+                    } catch (e: Exception) {
+                        Log.e("Login", "Exception during login", e)
+                        errorMessage = "Log in failed: ${e.localizedMessage}"
+                    }
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Log in")
         }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         TextButton(
@@ -77,5 +86,14 @@ fun Login(service: FireStore, nav: NavController) {
         ) {
             Text("Don't have an account? Sign up!")
         }
+
+        if (errorMessage.isNotBlank()) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colors.error,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
     }
 }
+

@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 
 @Composable
-fun RentBikeMain(nav: NavController) {
+fun RentBikeView(nav: NavController) {
     Column() {
         Text("RentBikeList")
     }

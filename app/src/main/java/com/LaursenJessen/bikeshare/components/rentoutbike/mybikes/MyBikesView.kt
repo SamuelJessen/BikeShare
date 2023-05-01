@@ -1,7 +1,5 @@
 package com.LaursenJessen.bikeshare.components.rentoutbike.mybikes
 
-import android.media.MediaDrm.LogMessage
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,7 +16,6 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.LaursenJessen.bikeshare.firestore.Bike
 import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.google.firebase.storage.FirebaseStorage
 
 @Composable
 fun MyBikesView(service: FireStore, nav: NavController) {
