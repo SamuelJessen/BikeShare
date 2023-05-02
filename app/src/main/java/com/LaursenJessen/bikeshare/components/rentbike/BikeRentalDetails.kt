@@ -1,5 +1,6 @@
 package com.LaursenJessen.bikeshare.components.rentbike
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -10,24 +11,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.LaursenJessen.bikeshare.firestore.Bike
 import com.LaursenJessen.bikeshare.firestore.FireStore
-import androidx.compose.material.OutlinedTextField
+import com.LaursenJessen.bikeshare.firestore.Rental
 import com.google.firebase.auth.FirebaseAuth
+import java.util.*
 
 @Composable
 fun BikeRentalDetails(nav: NavController, service: FireStore) {
     val bikeId = nav.currentBackStackEntry?.arguments?.getString("bikeId")
     val bike = remember { mutableStateOf<Bike?>(null) }
+    val rentalProcess = remember { mutableStateOf<Rental?>(null) }
     val showDialog = remember { mutableStateOf(false) }
     val duration = remember { mutableStateOf("") }
     val price = remember { mutableStateOf("") }
     val phoneNumber = remember { mutableStateOf("") }
-    val sliderValue = remember { mutableStateOf(0f) }
     val userEmail = FirebaseAuth.getInstance().currentUser?.email ?: ""
 
     LaunchedEffect(bikeId) {
@@ -37,42 +38,71 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
     if (showDialog.value) {
         AlertDialog(
             onDismissRequest = { showDialog.value = false },
+            modifier = Modifier.fillMaxWidth(),
             title = { Text(text = "Rent Bike") },
             text = {
                 Column {
                     OutlinedTextField(
                         value = duration.value,
-                        onValueChange = { newValue -> duration.value = newValue },
+                        onValueChange = { duration.value = it },
                         label = { Text("Duration (hours)") },
-                        keyboardType = KeyboardType.Number
+                        modifier = Modifier.fillMaxWidth()
                     )
                     OutlinedTextField(
                         value = price.value,
-                        onValueChange = { newValue -> price.value = newValue },
+                        onValueChange = { price.value = it },
                         label = { Text("Price") },
-                        keyboardType = KeyboardType.Number
+                        modifier = Modifier.fillMaxWidth()
                     )
                     OutlinedTextField(
                         value = phoneNumber.value,
-                        onValueChange = { newValue -> phoneNumber.value = newValue },
+                        onValueChange = { phoneNumber.value = it },
                         label = { Text("Phone Number") },
-                        keyboardType = KeyboardType.Phone
+                        modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text("Slide to confirm")
-                    Slider(
-                        value = sliderValue.value,
-                        onValueChange = { newValue -> sliderValue.value = newValue },
-                        valueRange = 0f..1f,
-                        onValueChangeFinished = {
-                            if (sliderValue.value >= 0.99f) {
+                    Button(
+                        onClick = {
+                            val rental = Rental(
+                                id = UUID.randomUUID().toString(),
+                                bike = bike.value!!,
+                                userId = FirebaseAuth.getInstance().currentUser?.uid ?: "",
+                                userEmail = userEmail,
+                                bikeId = bike.value!!.id,
+                                rentDuration = duration.value,
+                                phoneNumber = phoneNumber.value
+                            )
+                            rentalProcess.value = rental
+                        },
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                    ) {
+                        Text("Confirm")
+                    }
+                    LaunchedEffect(rentalProcess.value) {
+                        rentalProcess.value?.let { rental ->
+                            try {
+                                service.addRentalDocument(rental)
                                 showDialog.value = false
+                                rentalProcess.value = null
+                                nav.navigate("RentBikeView")
+                            } catch (e: Exception) {
+                                Log.e("Error adding rental", e.toString())
+                                rentalProcess.value = null
                             }
                         }
-                    )
+                    }
+                    Button(
+                        onClick = {
+                            showDialog.value = false
+                        },
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                    ) {
+                        Text("Close")
+                    }
+
                 }
             },
-            confirmButton = {},
+            confirmButton = { },
             dismissButton = { }
         )
     }

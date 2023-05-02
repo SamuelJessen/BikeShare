@@ -1,11 +1,13 @@
 package com.LaursenJessen.bikeshare.firestore
 
 import android.util.Log
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 
@@ -61,8 +63,28 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
         }
     }
 
+    suspend fun addRentalDocument(rental: Rental) = suspendCoroutine { continuation ->
+        api.collection("Rentals").document(rental.id)
+            .set(mapOf(
+                "bike" to rental.bike,
+                "userId" to rental.userId,
+                "userEmail" to rental.userEmail,
+                "bikeId" to rental.bikeId,
+                "rentDuration" to rental.rentDuration,
+                "phoneNumber" to rental.phoneNumber,
+                "rentedAt" to Timestamp.now()
+            ))
+            .addOnSuccessListener {
+                Log.d(TAG, "Rental document added successfully")
+                continuation.resume(Unit)
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding rental document", e)
+                continuation.resumeWithException(e)
+            }
+    }
 
-    suspend fun addBike(bike: Bike) {
+    suspend fun addBike(bike: Bike) = suspendCoroutine { continuation ->
         api.collection("Bikes").document(bike.id)
             .set(mapOf(
                 "Address" to bike.address,
@@ -75,12 +97,14 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
             ))
             .addOnSuccessListener {
                 Log.d(TAG, "Bike added successfully")
+                continuation.resume(Unit)
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error adding bike", e)
-                throw e
+                continuation.resumeWithException(e)
             }
     }
+
     suspend fun signup(email: String, password: String) {
         suspendCoroutine { continuation ->
             auth.createUserWithEmailAndPassword(email, password)
@@ -98,6 +122,7 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                 }
         }
     }
+
     suspend fun login(email: String, password: String) {
         suspendCoroutine { continuation ->
             auth.signInWithEmailAndPassword(email, password)
