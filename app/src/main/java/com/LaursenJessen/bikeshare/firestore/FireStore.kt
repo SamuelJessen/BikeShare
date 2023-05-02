@@ -2,10 +2,11 @@ package com.LaursenJessen.bikeshare.firestore
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 class FireStore(private val storage: FirebaseStorage, private val api: FirebaseFirestore, val auth: FirebaseAuth, private val isLoggedInChanged: (Boolean) -> Unit) {
@@ -35,6 +36,32 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                 }
         }
     }
+
+    suspend fun getBikeById(bikeId: String): Bike? {
+        return try {
+            val documentSnapshot = api.collection("Bikes").document(bikeId).get().await()
+            if (documentSnapshot.exists()) {
+                val data = documentSnapshot.data ?: mapOf()
+                Bike(
+                    id = documentSnapshot.id,
+                    address = data["Address"].toString(),
+                    description = data["Description"].toString(),
+                    name = data["Name"].toString(),
+                    distance = data["Distance"].toString().toFloat(),
+                    rentedOut = data["RentedOut"].toString().toBoolean(),
+                    userId = data["UserId"].toString(),
+                    imageUrl = data["ImageUrl"].toString()
+                )
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting bike by ID: $e")
+            null
+        }
+    }
+
+
     suspend fun addBike(bike: Bike) {
         api.collection("Bikes").document(bike.id)
             .set(mapOf(
