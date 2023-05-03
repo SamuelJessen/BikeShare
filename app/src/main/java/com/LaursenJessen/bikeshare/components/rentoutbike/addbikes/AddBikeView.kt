@@ -20,7 +20,7 @@ import java.util.*
 @Composable
 fun AddBikeView(service: FireStore, nav: NavController) {
     val name = remember { mutableStateOf("") }
-    val priceHour = remember { mutableStateOf("") }
+    val dailyPrice = remember { mutableStateOf("") }
     val distance = remember { mutableStateOf("") }
     val address = remember { mutableStateOf("") }
     val description = remember { mutableStateOf("") }
@@ -44,8 +44,8 @@ fun AddBikeView(service: FireStore, nav: NavController) {
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
-            value = priceHour.value,
-            onValueChange = { priceHour.value = it },
+            value = dailyPrice.value,
+            onValueChange = { dailyPrice.value = it },
             label = { Text(text = "Price pr day") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -86,7 +86,7 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                     id = UUID.randomUUID().toString(),
                     address = address.value,
                     name = name.value,
-                    dailyPrice = distance.value.toDouble().toInt(),
+                    dailyPrice = dailyPrice.value.toDouble().toInt(),
                     distance = distance.value.toDouble().toInt(),
                     description = description.value,
                     rentedOut = rentedOut.value,

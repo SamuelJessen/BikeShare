@@ -47,9 +47,6 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                     val totalPrice = derivedStateOf { duration.value.toInt() * bike.value!!.dailyPrice }
                     Text("Price (DKK): ${totalPrice.value}", style = MaterialTheme.typography.h6)
                     Spacer(modifier = Modifier.height(16.dp))
-                    if (bikeId != null) {
-                        Text(text = bikeId)
-                    }
                     Button(
                         onClick = {
                             val rental = FirebaseAuth.getInstance().currentUser?.let {
@@ -60,7 +57,7 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                                     userEmail = userEmail,
                                     bikeId = bike.value!!.id,
                                     rentDurationDays = duration.value.toInt(),
-                                    price = (duration.value.toInt() * bike.value!!.dailyPrice)
+                                    dailyPrice = (duration.value.toInt() * bike.value!!.dailyPrice)
                                 )
                             }
                             rentalProcess.value = rental

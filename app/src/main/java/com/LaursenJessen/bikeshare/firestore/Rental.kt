@@ -7,5 +7,5 @@ data class Rental(
     val userEmail: String,
     val bikeId:String,
     val rentDurationDays:Int,
-    val price: Int
+    val dailyPrice: Int
 )

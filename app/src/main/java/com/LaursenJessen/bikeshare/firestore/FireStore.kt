@@ -26,16 +26,16 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                             d.data?.get("Address").toString(),
                             d.data?.get("Description").toString(),
                             d.data?.get("Name").toString(),
-                            d.data?.get("dailyPrice")?.toString()?.toDoubleOrNull()?.toInt() ?: 0,
+                            d.data?.get("DailyPrice")?.toString()?.toDoubleOrNull()?.toInt() ?: 0,
                             d.data?.get("Distance").toString().toDouble().toInt(),
                             d.data?.get("RentedOut").toString().toBoolean(),
                             d.data?.get("UserId").toString(),
                             d.data?.get("ImageUrl").toString())
                             }
                     continuation.resume(bikes)
-                }.addOnFailureListener {
-                    Log.v(TAG, "We failed $it")
-                    throw it
+                }.addOnFailureListener {e ->
+                    Log.v(TAG, "ERROR: Could not get bikes", e)
+                    continuation.resumeWithException(e)
                 }
         }
     }
@@ -50,7 +50,7 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                     address = data["Address"].toString(),
                     description = data["Description"].toString(),
                     name = data["Name"].toString(),
-                    data["dailyPrice"]?.toString()?.toDoubleOrNull()?.toInt() ?: 0,
+                    data["DailyPrice"]?.toString()?.toDoubleOrNull()?.toInt() ?: 0,
                     distance = data["Distance"].toString().toDouble().toInt(),
                     rentedOut = data["RentedOut"].toString().toBoolean(),
                     userId = data["UserId"].toString(),
@@ -68,13 +68,13 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
     suspend fun addRentalDocument(rental: Rental) = suspendCoroutine { continuation ->
         api.collection("Rentals").document(rental.id)
             .set(mapOf(
-                "bike" to rental.bike,
-                "userId" to rental.userId,
-                "userEmail" to rental.userEmail,
-                "bikeId" to rental.bikeId,
-                "rentDurationDays" to rental.rentDurationDays,
-                "price" to rental.price,
-                "rentedAt" to Timestamp.now()
+                "Bike" to rental.bike,
+                "UserId" to rental.userId,
+                "UserEmail" to rental.userEmail,
+                "BikeId" to rental.bikeId,
+                "RentDurationDays" to rental.rentDurationDays,
+                "DailyPrice" to rental.dailyPrice,
+                "RentedAt" to Timestamp.now()
             ))
             .addOnSuccessListener {
                 Log.d(TAG, "Rental document added successfully")
