@@ -1,4 +1,4 @@
-package com.LaursenJessen.bikeshare.navigation.authentication
+package com.LaursenJessen.bikeshare.authenticationStateViewModel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

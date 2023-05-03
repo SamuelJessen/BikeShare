@@ -1,4 +1,4 @@
-package com.LaursenJessen.bikeshare.components.rentbike
+package com.LaursenJessen.bikeshare.components.rentBike
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.LaursenJessen.bikeshare.firestore.Bike
+import com.LaursenJessen.bikeshare.models.Bike
 
 @Composable
 fun BikeListItem(bike: Bike, nav: NavController) {

@@ -15,15 +15,15 @@ import com.LaursenJessen.bikeshare.components.authentication.authnav.authenticat
 import com.LaursenJessen.bikeshare.components.drawermenu.ScaffoldWithMenuContent
 import com.LaursenJessen.bikeshare.components.drawermenu.providers.getMenuItems
 import com.LaursenJessen.bikeshare.components.home.HomeScreen
-import com.LaursenJessen.bikeshare.components.rentbike.BikeRentalDetails
-import com.LaursenJessen.bikeshare.components.rentbike.RentBikeView
-import com.LaursenJessen.bikeshare.components.rentoutbike.RentOutBikeView
-import com.LaursenJessen.bikeshare.components.rentoutbike.addbikes.AddBikeView
-import com.LaursenJessen.bikeshare.components.rentoutbike.addbikestrava.AddBikeFromStravaView
-import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.MyBikesView
-import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.mybike.MyBikeView
+import com.LaursenJessen.bikeshare.components.rentBike.BikeRentalDetails
+import com.LaursenJessen.bikeshare.components.rentBike.RentBikeView
 import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
+import com.LaursenJessen.bikeshare.authenticationStateViewModel.AuthenticationViewModel
+import com.LaursenJessen.bikeshare.components.rentOutBike.RentOutBikeView
+import com.LaursenJessen.bikeshare.components.rentOutBike.addBikeStrava.AddBikeFromStravaView
+import com.LaursenJessen.bikeshare.components.rentOutBike.addBikes.AddBikeView
+import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.MyBikesView
+import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.myBike.MyBikeView
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

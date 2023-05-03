@@ -1,6 +1,5 @@
-package com.LaursenJessen.bikeshare.components.rentbike
+package com.LaursenJessen.bikeshare.components.rentBike
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -13,9 +12,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.LaursenJessen.bikeshare.firestore.Bike
 import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.LaursenJessen.bikeshare.firestore.Rental
+import com.LaursenJessen.bikeshare.models.Bike
+import com.LaursenJessen.bikeshare.models.Rental
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
@@ -27,6 +26,7 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
     val showDialog = remember { mutableStateOf(false) }
     val duration = remember { mutableStateOf(1f) }
     val userEmail = FirebaseAuth.getInstance().currentUser?.email ?: ""
+    val totalPrice = derivedStateOf { duration.value.toInt() * bike.value!!.dailyPrice }
 
     LaunchedEffect(bikeId) {
         bike.value = service.getBikeById(bikeId ?: "")
@@ -36,71 +36,67 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
         AlertDialog(onDismissRequest = { showDialog.value = false },
             modifier = Modifier.fillMaxWidth(),
             title = {
-                Text(
-                    text = "Rent ${bike.value!!.name}", style = MaterialTheme.typography.h4
-                )
+                Text(text = "Rent ${bike.value!!.name}", style = MaterialTheme.typography.h4)
             },
             text = {
                 Column {
+                    Text("Price (DKK): ${totalPrice.value}", style = MaterialTheme.typography.h6)
+                    Spacer(modifier = Modifier.height(30.dp))
                     Text("Duration (days): ${duration.value.toInt()}")
                     Slider(
                         value = duration.value,
                         onValueChange = { duration.value = it },
                         valueRange = 1f..30f,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth().height(50.dp)
                     )
-                    val totalPrice =
-                        derivedStateOf { duration.value.toInt() * bike.value!!.dailyPrice }
-                    Text("Price (DKK): ${totalPrice.value}", style = MaterialTheme.typography.h6)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        onClick = {
-                            val rental = FirebaseAuth.getInstance().currentUser?.let {
-                                Rental(
-                                    id = UUID.randomUUID().toString(),
-                                    bike = bike.value!!,
-                                    userId = it.uid,
-                                    userEmail = userEmail,
-                                    bikeId = bike.value!!.id,
-                                    rentDurationDays = duration.value.toInt(),
-                                    dailyPrice = (duration.value.toInt() * bike.value!!.dailyPrice)
-                                )
-                            }
-                            rentalProcess.value = rental
-                        },
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text("Confirm")
-                    }
-                    LaunchedEffect(rentalProcess.value) {
-                        rentalProcess.value?.let { rental ->
-                            try {
-                                service.addRentalDocument(rental)
+                        Button(
+                            onClick = {
                                 showDialog.value = false
-                                rentalProcess.value = null
-                                nav.navigate("RentBikeView")
-                            } catch (e: Exception) {
-                                Log.e("Error adding rental", e.toString())
-                                rentalProcess.value = null
-                            }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.error
+                            ),
+                            modifier = Modifier.weight(1f)
+                                .padding(end = 8.dp)
+                        ) {
+                            Text("Close", style = MaterialTheme.typography.body1)
+                        }
+
+                        Button(
+                            onClick = {
+                                val rental = FirebaseAuth.getInstance().currentUser?.let {
+                                    Rental(
+                                        id = UUID.randomUUID().toString(),
+                                        bike = bike.value!!,
+                                        userId = it.uid,
+                                        userEmail = userEmail,
+                                        bikeId = bike.value!!.id,
+                                        rentDurationDays = duration.value.toInt(),
+                                        dailyPrice = (duration.value.toInt() * bike.value!!.dailyPrice)
+                                    )
+                                }
+                                rentalProcess.value = rental
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.primary
+                            ),
+                            modifier = Modifier.weight(1f)
+                                .padding(start = 8.dp)
+                        ) {
+                            Text("Confirm", style = MaterialTheme.typography.body1)
                         }
                     }
-                    Button(
-                        onClick = {
-                            showDialog.value = false
-                        },
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error),
-                    ) {
-                        Text("Close")
-                    }
-
                 }
             },
             confirmButton = { },
             dismissButton = { })
     }
+
 
     bike.value?.let { bike ->
         Column(
@@ -143,13 +139,12 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
             )
             Spacer(modifier = Modifier.height(40.dp))
             if (bike.address.isNotEmpty() && bike.address != "null" && bike.address != null) {
-                OpenGoogleMapsButton(bike.address)
+                GoogleMapsLocationButton(bike.address)
             } else {
                 Text(text = "No address for this bike")
             }
             Button(
-                onClick = { showDialog.value = true },
-                modifier = Modifier.padding(top = 20.dp)
+                onClick = { showDialog.value = true }, modifier = Modifier.padding(top = 20.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = "Rent this bike")

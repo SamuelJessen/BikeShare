@@ -1,4 +1,4 @@
-package com.LaursenJessen.bikeshare.components.rentoutbike.addbikestrava
+package com.LaursenJessen.bikeshare.components.rentOutBike.addBikeStrava
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button

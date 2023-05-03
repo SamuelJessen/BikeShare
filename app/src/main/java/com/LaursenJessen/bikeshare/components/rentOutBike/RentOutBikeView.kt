@@ -1,4 +1,4 @@
-package com.LaursenJessen.bikeshare.components.rentoutbike
+package com.LaursenJessen.bikeshare.components.rentOutBike
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button

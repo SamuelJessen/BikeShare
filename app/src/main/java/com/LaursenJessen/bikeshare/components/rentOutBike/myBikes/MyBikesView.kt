@@ -1,4 +1,4 @@
-package com.LaursenJessen.bikeshare.components.rentoutbike.mybikes
+package com.LaursenJessen.bikeshare.components.rentOutBike.myBikes
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -14,7 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.LaursenJessen.bikeshare.firestore.Bike
+import com.LaursenJessen.bikeshare.models.Bike
 import com.LaursenJessen.bikeshare.firestore.FireStore
 
 @Composable

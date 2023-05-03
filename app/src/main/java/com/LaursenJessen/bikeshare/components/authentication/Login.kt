@@ -18,7 +18,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
+import com.LaursenJessen.bikeshare.authenticationStateViewModel.AuthenticationViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
