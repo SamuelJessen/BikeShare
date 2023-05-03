@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsBike
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,10 +33,13 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
     }
 
     if (showDialog.value) {
-        AlertDialog(
-            onDismissRequest = { showDialog.value = false },
+        AlertDialog(onDismissRequest = { showDialog.value = false },
             modifier = Modifier.fillMaxWidth(),
-            title = { Text(text = "Rent ${bike.value!!.name}", style = MaterialTheme.typography.h4) },
+            title = {
+                Text(
+                    text = "Rent ${bike.value!!.name}", style = MaterialTheme.typography.h4
+                )
+            },
             text = {
                 Column {
                     Text("Duration (days): ${duration.value.toInt()}")
@@ -44,7 +49,8 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                         valueRange = 1f..30f,
                         modifier = Modifier.fillMaxWidth()
                     )
-                    val totalPrice = derivedStateOf { duration.value.toInt() * bike.value!!.dailyPrice }
+                    val totalPrice =
+                        derivedStateOf { duration.value.toInt() * bike.value!!.dailyPrice }
                     Text("Price (DKK): ${totalPrice.value}", style = MaterialTheme.typography.h6)
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
@@ -93,8 +99,7 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                 }
             },
             confirmButton = { },
-            dismissButton = { }
-        )
+            dismissButton = { })
     }
 
     bike.value?.let { bike ->
@@ -104,8 +109,20 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
             Text(
                 text = bike.name,
                 style = MaterialTheme.typography.h4,
-                modifier = Modifier.padding(bottom = 8.dp)
             )
+            if (!bike.rentedOut) {
+                Text(
+                    text = "Status: Available",
+                    style = MaterialTheme.typography.body1,
+                    color = Color.Green,
+                )
+            } else {
+                Text(
+                    text = "Status: Rented Out",
+                    style = MaterialTheme.typography.body1,
+                    color = Color.Red,
+                )
+            }
             if (bike.imageUrl != null && bike.imageUrl != "null" && bike.imageUrl.isNotEmpty()) {
                 Image(
                     painter = rememberImagePainter(bike.imageUrl),
@@ -118,40 +135,32 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
             } else {
                 Text(text = "No image for this bike")
             }
-            Text(text = "Description: ${bike.description}", style = MaterialTheme.typography.body1)
-            Text(text = "Distance: ${bike.distance} km", style = MaterialTheme.typography.body1)
-            if (!bike.rentedOut) {
-                Text(
-                    text = "Status: Available",
-                    style = MaterialTheme.typography.body1,
-                    color = Color.Green,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-                if (bike.address.isNotEmpty() && bike.address != "null" && bike.address != null)
-                {OpenGoogleMapsButton(bike.address)}
-                else {
-                    Text(text = "No address for this bike")
-                }
-
-                Button(
-                    onClick = { showDialog.value = true },
-                    modifier = Modifier.padding(top = 16.dp)
-                ) {
-                    Text(text = "Rent this bike")
-                }
+            Text(text = "${bike.description}", style = MaterialTheme.typography.body1)
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = "Preliminary ride distance: ${bike.distance}Km",
+                style = MaterialTheme.typography.body1
+            )
+            Spacer(modifier = Modifier.height(40.dp))
+            if (bike.address.isNotEmpty() && bike.address != "null" && bike.address != null) {
+                OpenGoogleMapsButton(bike.address)
             } else {
-                Text(
-                    text = "Status: Rented Out",
-                    style = MaterialTheme.typography.body1,
-                    color = Color.Red,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
+                Text(text = "No address for this bike")
+            }
+            Button(
+                onClick = { showDialog.value = true },
+                modifier = Modifier.padding(top = 20.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = "Rent this bike")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(Icons.Filled.DirectionsBike, contentDescription = "rent bike icon")
+                }
             }
         }
     } ?: run {
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()
         }

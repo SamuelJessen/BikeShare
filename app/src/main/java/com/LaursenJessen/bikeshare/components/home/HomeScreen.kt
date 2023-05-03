@@ -10,49 +10,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun HomeScreen(nav: NavController, auth: FirebaseAuth) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+fun HomeScreen(nav: NavController) {
+    Box(
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = "Welcome to BikeShare",
-            style = MaterialTheme.typography.h4,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-        auth.currentUser?.let {
+        Column(
+            modifier = Modifier.padding(25.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Text(
-                text = it.uid,
-                style = MaterialTheme.typography.h4,
+                text = "Welcome to BikeShare",
+                style = MaterialTheme.typography.h3,
                 textAlign = TextAlign.Center,
+                modifier = Modifier.padding(bottom = 32.dp)
             )
-        }
-        Button(
-            onClick = { nav.navigate("RentBikeView") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            Text(
-                text = "Rent a bike",
-                style = MaterialTheme.typography.button
-            )
-        }
-        Button(
-            onClick = { nav.navigate("MyBikesView") },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "Rent out my bike / My bikes",
-                style = MaterialTheme.typography.button
-            )
+            Button(
+                onClick = { nav.navigate("RentBikeView") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            ) {
+                Text(
+                    text = "Rent a bike", style = MaterialTheme.typography.button
+                )
+            }
+            Button(
+                onClick = { nav.navigate("MyBikesView") }, modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Rent my bike", style = MaterialTheme.typography.button
+                )
+            }
         }
     }
 }

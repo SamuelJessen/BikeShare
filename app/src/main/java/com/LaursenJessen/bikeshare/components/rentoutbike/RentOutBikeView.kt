@@ -8,7 +8,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun RentOutBikeView(nav: NavController) {
-    Column() {
+    Column {
         Text("Rent Out Bikes")
         Button(onClick = { nav.navigate("MyBikesView") }) {
             Text(text = "My bikes")

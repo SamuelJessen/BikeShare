@@ -1,6 +1,5 @@
 package com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.mybike
 
-import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,7 +14,9 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.LaursenJessen.bikeshare.firestore.Bike
 import com.LaursenJessen.bikeshare.firestore.FireStore
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -85,7 +86,7 @@ fun MyBikeView(
                         .clip(MaterialTheme.shapes.medium)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                it.name?.let {
+                it.name.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.h4

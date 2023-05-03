@@ -20,12 +20,12 @@ import com.LaursenJessen.bikeshare.firestore.FireStore
 @Composable
 fun MyBikesView(service: FireStore, nav: NavController) {
     val bikes = remember { mutableStateOf(emptyList<Bike>()) }
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         val list = service.getBikes()
         bikes.value = list
     }
     var expanded by remember { mutableStateOf(false) }
-    Column() {
+    Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = "My Bikes",
@@ -33,9 +33,7 @@ fun MyBikesView(service: FireStore, nav: NavController) {
                 modifier = Modifier.padding(16.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(
-                onClick = { expanded = true }
-            ) {
+            IconButton(onClick = { expanded = true }) {
                 Icon(Icons.Filled.Add, contentDescription = "Add")
             }
             DropdownMenu(
@@ -57,15 +55,15 @@ fun MyBikesView(service: FireStore, nav: NavController) {
                 }
             }
         }
-        val bikesForUser = bikes.value.filter{it.userId == service.auth.uid}
+        val bikesForUser = bikes.value.filter { it.userId == service.auth.uid }
         bikesForUser.map {
             BikeListItem(it, nav)
-    }
+        }
     }
 }
 
 @Composable
-fun BikeListItem(bike: Bike,nav: NavController) {
+fun BikeListItem(bike: Bike, nav: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -75,8 +73,7 @@ fun BikeListItem(bike: Bike,nav: NavController) {
         elevation = 4.dp,
     ) {
         Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically
         ) {
             val storageRef = bike.imageUrl
             Image(

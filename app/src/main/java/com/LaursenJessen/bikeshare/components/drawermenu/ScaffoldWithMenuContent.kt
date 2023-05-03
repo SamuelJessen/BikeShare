@@ -23,33 +23,25 @@ fun ScaffoldWithMenuContent(
     showBackButton: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            TopAppBar(
-                title = { Text(text = topBarText) },
-                navigationIcon = {
-                    if (showBackButton) {
-                        IconButton(onClick = {
-                            scope.launch { scaffoldState.drawerState.close() }
-                            nav?.popBackStack()
-                        }) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = null)
-                        }
-                    } else {
-                        IconButton(onClick = {
-                            scope.launch { scaffoldState.drawerState.open() }
-                        }) {
-                            Icon(Icons.Default.Menu, contentDescription = null)
-                        }
-                    }
+    Scaffold(scaffoldState = scaffoldState, topBar = {
+        TopAppBar(title = { Text(text = topBarText) }, navigationIcon = {
+            if (showBackButton) {
+                IconButton(onClick = {
+                    scope.launch { scaffoldState.drawerState.close() }
+                    nav?.popBackStack()
+                }) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = null)
                 }
-            )
-        },
-        drawerContent = {
-            DrawerMenuHeader()
-            DrawerMenuItem(menuItems, scaffoldState = scaffoldState, scope = scope)
-        },
-        content = { content() }
-    )
+            } else {
+                IconButton(onClick = {
+                    scope.launch { scaffoldState.drawerState.open() }
+                }) {
+                    Icon(Icons.Default.Menu, contentDescription = null)
+                }
+            }
+        })
+    }, drawerContent = {
+        DrawerMenuHeader()
+        DrawerMenuItem(menuItems, scaffoldState = scaffoldState, scope = scope)
+    }, content = { content() })
 }

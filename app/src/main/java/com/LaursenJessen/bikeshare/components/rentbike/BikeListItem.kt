@@ -29,7 +29,10 @@ fun BikeListItem(bike: Bike, nav: NavController) {
             modifier = Modifier.padding(16.dp)
         ) {
             Text(text = bike.name, style = MaterialTheme.typography.h5)
-            Text(text = "Preliminary ride distance: ${bike.distance}km", style = MaterialTheme.typography.body2)
+            Text(
+                text = "Preliminary ride distance: ${bike.distance}km",
+                style = MaterialTheme.typography.body2
+            )
             if (!bike.rentedOut) {
                 Text(
                     text = "Status: Available",

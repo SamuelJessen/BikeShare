@@ -1,7 +1,8 @@
 package com.LaursenJessen.bikeshare.components.drawermenu.providers
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.DirectionsBike
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DirectionsBike
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.ViewList
@@ -14,13 +15,16 @@ fun getMenuItems(navController: NavController, auth: FirebaseAuth): List<DrawerM
         DrawerMenuItemModel("1", "Home", Icons.Rounded.Home, "HomeScreenMenu") {
             navController.navigate("HomeScreen")
         },
-        DrawerMenuItemModel("2", "Add bike", Icons.Rounded.DirectionsBike, "AddBikeMenu") {
+        DrawerMenuItemModel("2", "Rent bikes", Icons.Filled.DirectionsBike, "RentBikes") {
+            navController.navigate("RentBikeView")
+        },
+        DrawerMenuItemModel("3", "Add bike", Icons.Default.Add, "AddBikeMenu") {
             navController.navigate("AddBike")
         },
-        DrawerMenuItemModel("3", "My bikes", Icons.Rounded.ViewList, "MyBikes") {
+        DrawerMenuItemModel("4", "My bikes", Icons.Rounded.ViewList, "MyBikes") {
             navController.navigate("MyBikesView")
         },
-        DrawerMenuItemModel("4", "Logout", Icons.Rounded.ExitToApp, "Logout") {
+        DrawerMenuItemModel("5", "Logout", Icons.Rounded.ExitToApp, "Logout") {
             auth.signOut()
             navController.navigate("Login")
         },

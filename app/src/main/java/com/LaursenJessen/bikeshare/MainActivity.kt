@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
         val service = FireStore(storage, api, auth) { auth.currentUser != null }
         setContent {
-            BikeShareTheme() {
+            BikeShareTheme(darkTheme = false) {
                 AppNavigation(authViewModel, service, auth)
             }
         }
