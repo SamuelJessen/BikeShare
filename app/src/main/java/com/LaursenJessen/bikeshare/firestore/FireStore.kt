@@ -6,9 +6,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
+<<<<<<< HEAD
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+=======
+>>>>>>> origin/master
 
 
 class FireStore(private val storage: FirebaseStorage, private val api: FirebaseFirestore, val auth: FirebaseAuth, private val isLoggedInChanged: (Boolean) -> Unit) {
@@ -26,7 +29,7 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                             d.data?.get("Address").toString(),
                             d.data?.get("Description").toString(),
                             d.data?.get("Name").toString(),
-                            d.data?.get("Distance").toString().toFloat(),
+                            d.data?.get("Distance").toString().toDouble().toInt(),
                             d.data?.get("RentedOut").toString().toBoolean(),
                             d.data?.get("UserId").toString(),
                             d.data?.get("ImageUrl").toString())
@@ -38,7 +41,6 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                 }
         }
     }
-
     suspend fun getBikeById(bikeId: String): Bike? {
         return try {
             val documentSnapshot = api.collection("Bikes").document(bikeId).get().await()
@@ -49,7 +51,7 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                     address = data["Address"].toString(),
                     description = data["Description"].toString(),
                     name = data["Name"].toString(),
-                    distance = data["Distance"].toString().toFloat(),
+                    distance = data["Distance"].toString().toDouble().toInt(),
                     rentedOut = data["RentedOut"].toString().toBoolean(),
                     userId = data["UserId"].toString(),
                     imageUrl = data["ImageUrl"].toString()
@@ -104,7 +106,18 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                 continuation.resumeWithException(e)
             }
     }
-
+    suspend fun deleteBike(bikeId: String) {
+        api.collection("Bikes").document(bikeId)
+            .delete()
+            .addOnSuccessListener {
+                Log.d(TAG, "Bike deleted successfully")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error deleting bike", e)
+                throw e
+            }
+    }
+    
     suspend fun signup(email: String, password: String) {
         suspendCoroutine { continuation ->
             auth.createUserWithEmailAndPassword(email, password)
