@@ -70,8 +70,8 @@ fun AddBikeView(service: FireStore, nav: NavController) {
             Text(text = "Available for rent")
             Spacer(modifier = Modifier.width(8.dp))
             Switch(
-                checked = rentedOut.value,
-                onCheckedChange = { rentedOut.value = it },
+                checked = !rentedOut.value,
+                onCheckedChange = { rentedOut.value = !it },
                 modifier = Modifier.alignByBaseline()
             )
         }
@@ -82,7 +82,7 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                     id = UUID.randomUUID().toString(),
                     address = address.value,
                     name = name.value,
-                    distance = distance.value.toFloat(),
+                    distance = distance.value.toDouble().toInt(),
                     description = description.value,
                     rentedOut = rentedOut.value,
                     userId = service.auth.uid.toString(),
