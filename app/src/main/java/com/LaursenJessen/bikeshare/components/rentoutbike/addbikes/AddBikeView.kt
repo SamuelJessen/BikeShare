@@ -82,7 +82,7 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                     id = UUID.randomUUID().toString(),
                     address = address.value,
                     name = name.value,
-                    distance = distance.value.toFloat(),
+                    distance = distance.value.toDouble().toInt(),
                     description = description.value,
                     rentedOut = rentedOut.value,
                     userId = service.auth.uid.toString(),

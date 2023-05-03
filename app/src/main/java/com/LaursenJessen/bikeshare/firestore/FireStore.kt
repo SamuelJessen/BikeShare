@@ -6,6 +6,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
 
 
 class FireStore(private val storage: FirebaseStorage, private val api: FirebaseFirestore, val auth: FirebaseAuth, private val isLoggedInChanged: (Boolean) -> Unit) {
@@ -23,7 +24,7 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                             d.data?.get("Address").toString(),
                             d.data?.get("Description").toString(),
                             d.data?.get("Name").toString(),
-                            d.data?.get("Distance").toString().toFloat(),
+                            d.data?.get("Distance").toString().toDouble().toInt(),
                             d.data?.get("RentedOut").toString().toBoolean(),
                             d.data?.get("UserId").toString(),
                             d.data?.get("ImageUrl").toString())
@@ -33,6 +34,29 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                     Log.v(TAG, "We failed $it")
                     throw it
                 }
+        }
+    }
+    suspend fun getBikeById(bikeId: String): Bike? {
+        return try {
+            val documentSnapshot = api.collection("Bikes").document(bikeId).get().await()
+            if (documentSnapshot.exists()) {
+                val data = documentSnapshot.data ?: mapOf()
+                Bike(
+                    id = documentSnapshot.id,
+                    address = data["Address"].toString(),
+                    description = data["Description"].toString(),
+                    name = data["Name"].toString(),
+                    distance = data["Distance"].toString().toDouble().toInt(),
+                    rentedOut = data["RentedOut"].toString().toBoolean(),
+                    userId = data["UserId"].toString(),
+                    imageUrl = data["ImageUrl"].toString()
+                )
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting bike by ID: $e")
+            null
         }
     }
     suspend fun addBike(bike: Bike) {
@@ -51,6 +75,17 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error adding bike", e)
+                throw e
+            }
+    }
+    suspend fun deleteBike(bikeId: String) {
+        api.collection("Bikes").document(bikeId)
+            .delete()
+            .addOnSuccessListener {
+                Log.d(TAG, "Bike deleted successfully")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error deleting bike", e)
                 throw e
             }
     }

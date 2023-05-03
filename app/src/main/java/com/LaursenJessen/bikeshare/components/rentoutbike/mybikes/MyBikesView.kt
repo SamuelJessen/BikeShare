@@ -70,7 +70,7 @@ fun BikeListItem(bike: Bike,nav: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
-            .clickable(onClick = { nav.navigate("MyBikeView") }),
+            .clickable(onClick = { nav.navigate("MyBikeView/${bike.id}") }),
         shape = MaterialTheme.shapes.medium,
         elevation = 4.dp,
     ) {
