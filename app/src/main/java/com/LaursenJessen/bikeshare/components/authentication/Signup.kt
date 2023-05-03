@@ -11,15 +11,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
 import com.LaursenJessen.bikeshare.firestore.FireStore
+import com.LaursenJessen.bikeshare.authenticationStateViewModel.AuthenticationViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun Signup(service: FireStore, nav: NavController, authViewModel: AuthenticationViewModel) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-    val confirmPassword = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
     var errorMessage by remember { mutableStateOf("") }
@@ -51,15 +50,6 @@ fun Signup(service: FireStore, nav: NavController, authViewModel: Authentication
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(
-            value = confirmPassword.value,
-            onValueChange = { newText -> confirmPassword.value = newText },
-            label = { Text("Confirm Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier.fillMaxWidth()
-        )
         Spacer(modifier = Modifier.height(32.dp))
         Button(
             onClick = {
@@ -75,15 +65,13 @@ fun Signup(service: FireStore, nav: NavController, authViewModel: Authentication
                         errorMessage = "Sign up failed: ${e.localizedMessage}"
                     }
                 }
-            },
-            modifier = Modifier.fillMaxWidth()
+            }, modifier = Modifier.fillMaxWidth()
         ) {
             Text("Sign Up")
         }
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(
-            onClick = { nav.navigate("Login") },
-            modifier = Modifier.fillMaxWidth()
+            onClick = { nav.navigate("Login") }, modifier = Modifier.fillMaxWidth()
         ) {
             Text("Already have an account? Log in")
         }

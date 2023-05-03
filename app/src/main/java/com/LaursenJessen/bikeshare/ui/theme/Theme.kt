@@ -6,26 +6,30 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
-private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+val LightColorPalette = lightColors(
+    primary = Grey900,
+    primaryVariant = darkerBrownSugar,
+    secondary = Purple500,
+    background = smokeyWhite,
+    surface = smokeyWhite,
+    onPrimary = smokeyWhite,
+    onSecondary = smokeyWhite,
+    onBackground = Grey900,
+    onSurface = Grey900,
 )
 
-private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+val DarkColorPalette = darkColors(
+    primary = darkBlueCustom,
+    primaryVariant = darkerBrownSugar,
+    secondary = Purple200,
+    background = Grey900,
+    surface = Grey800,
+    onPrimary = smokeyWhite,
+    onSecondary = smokeyWhite,
+    onBackground = smokeyWhite,
+    onSurface = smokeyWhite
 )
+
 
 @Composable
 fun BikeShareTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
