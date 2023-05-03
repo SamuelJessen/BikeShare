@@ -63,15 +63,17 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = {
-                            val rental = Rental(
-                                id = UUID.randomUUID().toString(),
-                                bike = bike.value!!,
-                                userId = FirebaseAuth.getInstance().currentUser?.uid ?: "",
-                                userEmail = userEmail,
-                                bikeId = bike.value!!.id,
-                                rentDuration = duration.value,
-                                phoneNumber = phoneNumber.value
-                            )
+                            val rental = FirebaseAuth.getInstance().currentUser?.let {
+                                Rental(
+                                    id = UUID.randomUUID().toString(),
+                                    bike = bike.value!!,
+                                    userId = it.uid,
+                                    userEmail = userEmail,
+                                    bikeId = bike.value!!.id,
+                                    rentDuration = duration.value,
+                                    phoneNumber = phoneNumber.value
+                                )
+                            }
                             rentalProcess.value = rental
                         },
                         modifier = Modifier.align(Alignment.CenterHorizontally),
