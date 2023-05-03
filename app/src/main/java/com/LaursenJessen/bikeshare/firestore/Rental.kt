@@ -6,6 +6,6 @@ data class Rental(
     val userId:String,
     val userEmail: String,
     val bikeId:String,
-    val rentDuration:String,
-    val phoneNumber:String
+    val rentDurationDays:Int,
+    val price: Int
 )

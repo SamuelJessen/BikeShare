@@ -20,6 +20,7 @@ import java.util.*
 @Composable
 fun AddBikeView(service: FireStore, nav: NavController) {
     val name = remember { mutableStateOf("") }
+    val priceHour = remember { mutableStateOf("") }
     val distance = remember { mutableStateOf("") }
     val address = remember { mutableStateOf("") }
     val description = remember { mutableStateOf("") }
@@ -42,11 +43,16 @@ fun AddBikeView(service: FireStore, nav: NavController) {
             label = { Text(text = "Name") },
             modifier = Modifier.fillMaxWidth()
         )
-
+        OutlinedTextField(
+            value = priceHour.value,
+            onValueChange = { priceHour.value = it },
+            label = { Text(text = "Price pr day") },
+            modifier = Modifier.fillMaxWidth()
+        )
         OutlinedTextField(
             value = distance.value,
             onValueChange = { distance.value = it },
-            label = { Text(text = "Distance") },
+            label = { Text(text = "Preliminary ride distance (km)") },
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
@@ -55,14 +61,12 @@ fun AddBikeView(service: FireStore, nav: NavController) {
             label = { Text(text = "Address") },
             modifier = Modifier.fillMaxWidth()
         )
-
         OutlinedTextField(
             value = description.value,
             onValueChange = { description.value = it },
             label = { Text(text = "Description") },
             modifier = Modifier.fillMaxWidth()
         )
-
         Row(
             modifier = Modifier.padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -82,6 +86,7 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                     id = UUID.randomUUID().toString(),
                     address = address.value,
                     name = name.value,
+                    dailyPrice = distance.value.toDouble().toInt(),
                     distance = distance.value.toDouble().toInt(),
                     description = description.value,
                     rentedOut = rentedOut.value,

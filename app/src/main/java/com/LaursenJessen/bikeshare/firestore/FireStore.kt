@@ -6,18 +6,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
-<<<<<<< HEAD
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-=======
->>>>>>> origin/master
-
 
 class FireStore(private val storage: FirebaseStorage, private val api: FirebaseFirestore, val auth: FirebaseAuth, private val isLoggedInChanged: (Boolean) -> Unit) {
     companion object {
         const val TAG = "FIRE_STORE_SERVICE"
     }
+
     suspend fun getBikes(): List<Bike> {
         return suspendCoroutine { continuation ->
             api.collection("Bikes")
@@ -29,6 +26,7 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                             d.data?.get("Address").toString(),
                             d.data?.get("Description").toString(),
                             d.data?.get("Name").toString(),
+                            d.data?.get("dailyPrice")?.toString()?.toDoubleOrNull()?.toInt() ?: 0,
                             d.data?.get("Distance").toString().toDouble().toInt(),
                             d.data?.get("RentedOut").toString().toBoolean(),
                             d.data?.get("UserId").toString(),
@@ -41,6 +39,7 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                 }
         }
     }
+
     suspend fun getBikeById(bikeId: String): Bike? {
         return try {
             val documentSnapshot = api.collection("Bikes").document(bikeId).get().await()
@@ -51,6 +50,7 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                     address = data["Address"].toString(),
                     description = data["Description"].toString(),
                     name = data["Name"].toString(),
+                    data["dailyPrice"]?.toString()?.toDoubleOrNull()?.toInt() ?: 0,
                     distance = data["Distance"].toString().toDouble().toInt(),
                     rentedOut = data["RentedOut"].toString().toBoolean(),
                     userId = data["UserId"].toString(),
@@ -72,8 +72,8 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                 "userId" to rental.userId,
                 "userEmail" to rental.userEmail,
                 "bikeId" to rental.bikeId,
-                "rentDuration" to rental.rentDuration,
-                "phoneNumber" to rental.phoneNumber,
+                "rentDurationDays" to rental.rentDurationDays,
+                "price" to rental.price,
                 "rentedAt" to Timestamp.now()
             ))
             .addOnSuccessListener {
@@ -92,6 +92,7 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                 "Address" to bike.address,
                 "Description" to bike.description,
                 "Name" to bike.name,
+                "DailyPrice" to bike.dailyPrice,
                 "Distance" to bike.distance,
                 "RentedOut" to bike.rentedOut,
                 "UserId" to bike.userId,
@@ -106,18 +107,34 @@ class FireStore(private val storage: FirebaseStorage, private val api: FirebaseF
                 continuation.resumeWithException(e)
             }
     }
-    suspend fun deleteBike(bikeId: String) {
+
+    suspend fun deleteBike(bikeId: String) = suspendCoroutine { continuation ->
         api.collection("Bikes").document(bikeId)
             .delete()
             .addOnSuccessListener {
                 Log.d(TAG, "Bike deleted successfully")
+                continuation.resume(Unit)
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error deleting bike", e)
-                throw e
+                continuation.resumeWithException(e)
             }
     }
-    
+
+    suspend fun updateBikeRentedStatus(bikeId: String, rentedOut: Boolean) = suspendCoroutine { continuation ->
+        api.collection("Bikes").document(bikeId)
+            .update("RentedOut", rentedOut)
+            .addOnSuccessListener {
+                Log.d(TAG, "Bike rented status updated successfully")
+                continuation.resume(Unit)
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error updating bike rented status", e)
+                continuation.resumeWithException(e)
+            }
+    }
+
+
     suspend fun signup(email: String, password: String) {
         suspendCoroutine { continuation ->
             auth.createUserWithEmailAndPassword(email, password)

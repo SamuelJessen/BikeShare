@@ -16,7 +16,6 @@ val LightColorPalette = lightColors(
     onSecondary = smokeyWhite,
     onBackground = Grey900,
     onSurface = Grey900,
-
 )
 
 val DarkColorPalette = darkColors(

@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,9 +23,7 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
     val bike = remember { mutableStateOf<Bike?>(null) }
     val rentalProcess = remember { mutableStateOf<Rental?>(null) }
     val showDialog = remember { mutableStateOf(false) }
-    val duration = remember { mutableStateOf("") }
-    val price = remember { mutableStateOf("") }
-    val phoneNumber = remember { mutableStateOf("") }
+    val duration = remember { mutableStateOf(1f) }
     val userEmail = FirebaseAuth.getInstance().currentUser?.email ?: ""
 
     LaunchedEffect(bikeId) {
@@ -39,28 +34,22 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
         AlertDialog(
             onDismissRequest = { showDialog.value = false },
             modifier = Modifier.fillMaxWidth(),
-            title = { Text(text = "Rent Bike") },
+            title = { Text(text = "Rent ${bike.value!!.name}", style = MaterialTheme.typography.h4) },
             text = {
                 Column {
-                    OutlinedTextField(
+                    Text("Duration (days): ${duration.value.toInt()}")
+                    Slider(
                         value = duration.value,
                         onValueChange = { duration.value = it },
-                        label = { Text("Duration (hours)") },
+                        valueRange = 1f..30f,
                         modifier = Modifier.fillMaxWidth()
                     )
-                    OutlinedTextField(
-                        value = price.value,
-                        onValueChange = { price.value = it },
-                        label = { Text("Price") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    OutlinedTextField(
-                        value = phoneNumber.value,
-                        onValueChange = { phoneNumber.value = it },
-                        label = { Text("Phone Number") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    val totalPrice = derivedStateOf { duration.value.toInt() * bike.value!!.dailyPrice }
+                    Text("Price (DKK): ${totalPrice.value}", style = MaterialTheme.typography.h6)
                     Spacer(modifier = Modifier.height(16.dp))
+                    if (bikeId != null) {
+                        Text(text = bikeId)
+                    }
                     Button(
                         onClick = {
                             val rental = FirebaseAuth.getInstance().currentUser?.let {
@@ -70,13 +59,14 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                                     userId = it.uid,
                                     userEmail = userEmail,
                                     bikeId = bike.value!!.id,
-                                    rentDuration = duration.value,
-                                    phoneNumber = phoneNumber.value
+                                    rentDurationDays = duration.value.toInt(),
+                                    price = (duration.value.toInt() * bike.value!!.dailyPrice)
                                 )
                             }
                             rentalProcess.value = rental
                         },
                         modifier = Modifier.align(Alignment.CenterHorizontally),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
                     ) {
                         Text("Confirm")
                     }
@@ -98,6 +88,7 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                             showDialog.value = false
                         },
                         modifier = Modifier.align(Alignment.CenterHorizontally),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error),
                     ) {
                         Text("Close")
                     }
@@ -139,6 +130,12 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                     color = Color.Green,
                     modifier = Modifier.padding(top = 8.dp)
                 )
+                if (bike.address.isNotEmpty() && bike.address != "null" && bike.address != null)
+                {OpenGoogleMapsButton(bike.address)}
+                else {
+                    Text(text = "No address for this bike")
+                }
+
                 Button(
                     onClick = { showDialog.value = true },
                     modifier = Modifier.padding(top = 16.dp)

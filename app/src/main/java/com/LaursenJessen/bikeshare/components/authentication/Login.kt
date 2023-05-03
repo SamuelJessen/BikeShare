@@ -11,8 +11,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
 import com.LaursenJessen.bikeshare.firestore.FireStore
+import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -64,9 +64,7 @@ fun Login(service: FireStore, nav: NavController, authViewModel: AuthenticationV
                     try {
                         val user = service.login(email.value, password.value)
                         authViewModel.setAuthenticated(true)
-                        nav.navigate("HomeScreen") {
-                            launchSingleTop = true
-                        }
+                        nav.navigate("HomeScreen")
                     } catch (e: Exception) {
                         Log.e("Login", "Exception during login", e)
                         errorMessage = "Log in failed: ${e.localizedMessage}"

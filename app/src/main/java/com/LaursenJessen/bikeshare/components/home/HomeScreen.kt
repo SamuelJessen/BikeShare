@@ -10,9 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun HomeScreen(nav: NavController) {
+fun HomeScreen(nav: NavController, auth: FirebaseAuth) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -26,6 +27,13 @@ fun HomeScreen(nav: NavController) {
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 16.dp)
         )
+        auth.currentUser?.let {
+            Text(
+                text = it.uid,
+                style = MaterialTheme.typography.h4,
+                textAlign = TextAlign.Center,
+            )
+        }
         Button(
             onClick = { nav.navigate("RentBikeView") },
             modifier = Modifier

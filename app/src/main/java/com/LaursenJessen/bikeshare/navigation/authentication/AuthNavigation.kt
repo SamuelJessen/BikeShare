@@ -6,7 +6,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import kotlinx.coroutines.delay
 
 fun NavGraphBuilder.authenticatedComposable(
     route: String,
@@ -21,7 +20,6 @@ fun NavGraphBuilder.authenticatedComposable(
             val currentRoute = navController.currentBackStackEntry?.destination?.route
             if (currentRoute != "Login") {
                 LaunchedEffect(Unit) {
-                    delay(1000) // Delay for 1 second
                     navController.navigate("Login")
                 }
                 CircularProgressIndicator()

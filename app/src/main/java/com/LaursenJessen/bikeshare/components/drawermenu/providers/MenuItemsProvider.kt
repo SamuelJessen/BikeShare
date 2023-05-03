@@ -18,7 +18,6 @@ fun getMenuItems(navController: NavController, auth: FirebaseAuth): List<DrawerM
             navController.navigate("AddBike")
         },
         DrawerMenuItemModel("3", "My bikes", Icons.Rounded.ViewList, "MyBikes") {
-            auth.signOut()
             navController.navigate("MyBikesView")
         },
         DrawerMenuItemModel("4", "Logout", Icons.Rounded.ExitToApp, "Logout") {

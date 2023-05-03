@@ -39,7 +39,7 @@ fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, au
             composable("Login") { Login(service, nav = navController, authViewModel = authViewModel) }
             composable("Signup") { Signup(service, nav = navController, authViewModel = authViewModel) }
             authenticatedComposable("HomeScreen", navController, authViewModel.isAuthenticated) {
-                ScaffoldWithMenuContent(scaffoldState, scope, menuItems, topBarText = "Home") { HomeScreen(nav = navController) }
+                ScaffoldWithMenuContent(scaffoldState, scope, menuItems, topBarText = "Home") { HomeScreen(nav = navController, auth) }
             }
             authenticatedComposable("RentBikeView", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(scaffoldState, scope, menuItems, topBarText = "Rent bike") { RentBikeView(nav = navController, service = service) }
@@ -57,7 +57,7 @@ fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, au
                 ScaffoldWithMenuContent(scaffoldState, scope, menuItems, topBarText = "Add bike from Strava") { AddBikeFromStravaView(nav = navController) }
             }
             authenticatedComposable("MyBikeView/{bikeId}", navController, authViewModel.isAuthenticated) {
-                ScaffoldWithMenuContent(scaffoldState, scope, menuItems) { MyBikeView(nav = navController, service = service) }
+                ScaffoldWithMenuContent(scaffoldState, scope, menuItems, topBarText = "My bike") { MyBikeView(nav = navController, service = service) }
             }
             authenticatedComposable("BikeRental/{bikeId}", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(scaffoldState, scope, menuItems, topBarText= "Bike Rental", showBackButton = true, nav = navController) { BikeRentalDetails(nav = navController, service = service) }
