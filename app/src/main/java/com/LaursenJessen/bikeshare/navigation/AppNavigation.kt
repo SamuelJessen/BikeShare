@@ -16,6 +16,8 @@ import com.LaursenJessen.bikeshare.components.authentication.authnav.authenticat
 import com.LaursenJessen.bikeshare.components.drawermenu.ScaffoldWithMenuContent
 import com.LaursenJessen.bikeshare.components.drawermenu.providers.getMenuItems
 import com.LaursenJessen.bikeshare.components.home.HomeScreen
+import com.LaursenJessen.bikeshare.components.home.PositionService
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.LaursenJessen.bikeshare.components.rentBike.BikeRentalDetails
 import com.LaursenJessen.bikeshare.components.rentBike.RentBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.RentOutBikeView
@@ -29,7 +31,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, auth: FirebaseAuth) {
+fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, auth: FirebaseAuth, locationService : PositionService) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -53,7 +55,7 @@ fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, au
             authenticatedComposable("HomeScreen", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(
                     scaffoldState, scope, menuItems, topBarText = "Home"
-                ) { HomeScreen(nav = navController) }
+                ) { HomeScreen(nav = navController,locationService) }
             }
             authenticatedComposable("RentBikeView", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(
