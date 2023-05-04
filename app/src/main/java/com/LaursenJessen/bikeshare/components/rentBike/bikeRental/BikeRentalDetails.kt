@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.LaursenJessen.bikeshare.models.Bike
-import com.LaursenJessen.bikeshare.models.Rental
+import com.LaursenJessen.bikeshare.firestore.models.Bike
+import com.LaursenJessen.bikeshare.firestore.models.Rental
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 

@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.LaursenJessen.bikeshare.models.Bike
+import com.LaursenJessen.bikeshare.firestore.models.Bike
 
 @Composable
 fun BikeListItem(bike: Bike, nav: NavController) {

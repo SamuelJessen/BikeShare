@@ -1,9 +1,9 @@
 package com.LaursenJessen.bikeshare.firestore
 
 import android.util.Log
-import com.LaursenJessen.bikeshare.models.Bike
-import com.LaursenJessen.bikeshare.models.Rental
-import com.LaursenJessen.bikeshare.models.User
+import com.LaursenJessen.bikeshare.firestore.models.Bike
+import com.LaursenJessen.bikeshare.firestore.models.Rental
+import com.LaursenJessen.bikeshare.firestore.models.User
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

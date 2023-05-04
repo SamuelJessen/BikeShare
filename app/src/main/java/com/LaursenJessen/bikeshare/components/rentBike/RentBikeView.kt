@@ -12,7 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.models.Bike
+import com.LaursenJessen.bikeshare.firestore.models.Bike
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.models.Bike
+import com.LaursenJessen.bikeshare.firestore.models.Bike
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
