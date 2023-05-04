@@ -25,8 +25,8 @@ import com.LaursenJessen.bikeshare.components.rentOutBike.RentOutBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.addBikeStrava.AddBikeFromStravaView
 import com.LaursenJessen.bikeshare.components.rentOutBike.addBikes.AddBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.MyBikesView
+import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.myBike.MyBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myRentals.MyRentalsView
-import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.mybike.MyBikeView
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.google.firebase.auth.FirebaseAuth
 
