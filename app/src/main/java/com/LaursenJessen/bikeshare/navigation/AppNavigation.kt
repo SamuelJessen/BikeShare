@@ -21,8 +21,6 @@ import com.LaursenJessen.bikeshare.components.home.HomeScreen
 import com.LaursenJessen.bikeshare.components.home.PositionService
 import com.LaursenJessen.bikeshare.components.rentBike.BikeRentalDetails
 import com.LaursenJessen.bikeshare.components.rentBike.RentBikeView
-import com.LaursenJessen.bikeshare.components.rentOutBike.RentOutBikeView
-import com.LaursenJessen.bikeshare.components.rentOutBike.addBikeStrava.AddBikeFromStravaView
 import com.LaursenJessen.bikeshare.components.rentOutBike.addBikes.AddBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.MyBikesView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.myBike.MyBikeView
@@ -33,7 +31,12 @@ import com.google.firebase.auth.FirebaseAuth
 @RequiresApi(Build.VERSION_CODES.S)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, auth: FirebaseAuth, locationService : PositionService) {
+fun AppNavigation(
+    authViewModel: AuthenticationViewModel,
+    service: FireStore,
+    auth: FirebaseAuth,
+    locationService: PositionService
+) {
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -57,7 +60,7 @@ fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, au
             authenticatedComposable("HomeScreen", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(
                     scaffoldState, scope, menuItems, topBarText = "Home"
-                ) { HomeScreen(nav = navController,locationService) }
+                ) { HomeScreen(nav = navController, locationService) }
             }
             authenticatedComposable("RentBikeView", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(
@@ -69,22 +72,11 @@ fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, au
                     scaffoldState, scope, menuItems, topBarText = "Add bike"
                 ) { AddBikeView(nav = navController, service = service) }
             }
-            authenticatedComposable(
-                "RentOutBikeView", navController, authViewModel.isAuthenticated
-            ) {
-                ScaffoldWithMenuContent(
-                    scaffoldState, scope, menuItems, topBarText = "Rent out bike"
-                ) { RentOutBikeView(nav = navController) }
-            }
+
             authenticatedComposable("MyBikesView", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(
                     scaffoldState, scope, menuItems, topBarText = "My bikes"
                 ) { MyBikesView(nav = navController, service = service) }
-            }
-            authenticatedComposable("AddBikeStrava", navController, authViewModel.isAuthenticated) {
-                ScaffoldWithMenuContent(
-                    scaffoldState, scope, menuItems, topBarText = "Add bike from Strava"
-                ) { AddBikeFromStravaView(nav = navController) }
             }
             authenticatedComposable("MyRentalsView", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(
