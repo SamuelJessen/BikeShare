@@ -74,23 +74,96 @@ class FireStore(
 
     suspend fun addRentalDocument(rental: Rental) = suspendCoroutine { continuation ->
         api.collection("Rentals").document(rental.id).set(
-                mapOf(
-                    "Bike" to rental.bike,
-                    "UserId" to rental.userId,
-                    "UserEmail" to rental.userEmail,
-                    "BikeId" to rental.bikeId,
-                    "RentDurationDays" to rental.rentDurationDays,
-                    "DailyPrice" to rental.dailyPrice,
-                    "RentedAt" to Timestamp.now()
-                )
-            ).addOnSuccessListener {
-                Log.d(TAG, "Rental document added successfully")
-                continuation.resume(Unit)
-            }.addOnFailureListener { e ->
-                Log.w(TAG, "Error adding rental document", e)
-                continuation.resumeWithException(e)
-            }
+            mapOf(
+                "Bike" to mapOf(
+                    "Id" to rental.bike.id,
+                    "Address" to rental.bike.address,
+                    "Description" to rental.bike.description,
+                    "Name" to rental.bike.name,
+                    "DailyPrice" to rental.bike.dailyPrice,
+                    "Distance" to rental.bike.distance,
+                    "RentedOut" to rental.bike.rentedOut,
+                    "UserId" to rental.bike.userId,
+                    "ImageUrl" to rental.bike.imageUrl
+                ),
+                "UserId" to rental.userId,
+                "UserEmail" to rental.userEmail,
+                "BikeId" to rental.bikeId,
+                "RentDurationDays" to rental.rentDurationDays,
+                "DailyPrice" to rental.dailyPrice,
+                "RentedAt" to Timestamp.now()
+            )
+        ).addOnSuccessListener {
+            Log.d(TAG, "Rental document added successfully")
+            continuation.resume(Unit)
+        }.addOnFailureListener { e ->
+            Log.w(TAG, "Error adding rental document", e)
+            continuation.resumeWithException(e)
+        }
     }
+
+    suspend fun getRentals(userId: String): List<Rental> {
+        return suspendCoroutine { continuation ->
+            api.collection("Bikes")
+                .get()
+                .addOnSuccessListener { bikeDocuments ->
+                    val bikeIds = bikeDocuments.mapNotNull { document ->
+                        if (document.data["UserId"] == userId) {
+                            document.id
+                        } else {
+                            null
+                        }
+                    }
+                    Log.d(TAG, "UserId: $userId")
+                    Log.d(TAG, "BikeIds: $bikeIds")
+                    if (bikeIds.isEmpty()) {
+                        continuation.resume(emptyList())
+                    } else {
+                        api.collection("Rentals")
+                            .whereIn("BikeId", bikeIds)
+                            .get()
+                            .addOnSuccessListener { rentalDocuments ->
+                                val rentals = rentalDocuments.mapNotNull { rentalDocument ->
+                                    val bikeMap = rentalDocument.data["Bike"] as? Map<*, *>
+                                    val bike = bikeMap?.let {
+                                        Bike(
+                                            it["Id"] as String? ?: "",
+                                            it["Address"] as String? ?: "",
+                                            it["Description"] as String? ?: "",
+                                            it["Name"] as String? ?: "",
+                                            (it["DailyPrice"] as Number?)?.toInt() ?: 0,
+                                            (it["Distance"] as Number?)?.toInt() ?: 0,
+                                            it["RentedOut"] as Boolean? ?: false,
+                                            it["UserId"] as String? ?: "",
+                                            it["ImageUrl"] as String? ?: ""
+                                        )
+                                    }
+                                    bike?.let {
+                                        Rental(
+                                            rentalDocument.id,
+                                            it,
+                                            rentalDocument.data["UserId"]?.toString() ?: "",
+                                            rentalDocument.data["UserEmail"]?.toString() ?: "",
+                                            rentalDocument.data["BikeId"]?.toString() ?: "",
+                                            rentalDocument.data["RentDurationDays"]?.toString()?.toIntOrNull() ?: 0,
+                                            rentalDocument.data["DailyPrice"]?.toString()?.toIntOrNull() ?: 0
+                                        )
+                                    }
+                                }
+                                Log.d(TAG, "Rentals: $rentals")
+                                continuation.resume(rentals)
+                            }.addOnFailureListener { e ->
+                                Log.v(TAG, "ERROR: Could not get Rental Documents", e)
+                                continuation.resumeWithException(e)
+                            }
+                    }
+                }.addOnFailureListener { e ->
+                    Log.v(TAG, "ERROR: Could not get Bike Documents", e)
+                    continuation.resumeWithException(e)
+                }
+        }
+    }
+
 
     suspend fun addBike(bike: Bike) = suspendCoroutine { continuation ->
         api.collection("Bikes").document(bike.id).set(
