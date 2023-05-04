@@ -10,7 +10,6 @@ import androidx.activity.viewModels
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import com.LaursenJessen.bikeshare.components.home.PositionService
-import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
 import com.LaursenJessen.bikeshare.components.navigation.AppNavigation
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.LaursenJessen.bikeshare.authenticationStateViewModel.AuthenticationViewModel

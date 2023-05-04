@@ -113,7 +113,7 @@ class KtorWeatherService : WeatherService {
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun WeatherView(locationService : PositionService, modifier: Modifier) {
+fun WeatherView(locationService : PositionService) {
     val weatherService = KtorWeatherService()
     val data = remember { mutableStateOf<WeatherData?>(null) }
     val isLoading = remember { mutableStateOf(false) }
@@ -130,7 +130,6 @@ fun WeatherView(locationService : PositionService, modifier: Modifier) {
     }
     DisposableEffect(Unit) { onDispose { weatherService.close() } }
     Box(
-        modifier = modifier,
     ) {
         if (isLoading.value) {
             Column(
