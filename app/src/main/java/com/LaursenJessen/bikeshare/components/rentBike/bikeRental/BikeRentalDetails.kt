@@ -82,11 +82,8 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                                 }
                                 rentalProcess.value = rental
                             },
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = MaterialTheme.colors.primary
-                            ),
-                            modifier = Modifier.weight(1f)
-                                .padding(start = 8.dp)
+                            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary),
+                            modifier = Modifier.weight(1f).padding(start = 8.dp)
                         ) {
                             Text("Confirm", style = MaterialTheme.typography.body1)
                         }

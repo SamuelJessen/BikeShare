@@ -9,6 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.LaursenJessen.bikeshare.authenticationStateViewModel.AuthenticationViewModel
 import com.LaursenJessen.bikeshare.components.authentication.Login
 import com.LaursenJessen.bikeshare.components.authentication.Signup
 import com.LaursenJessen.bikeshare.components.authentication.authnav.authenticatedComposable
@@ -17,13 +18,13 @@ import com.LaursenJessen.bikeshare.components.drawermenu.providers.getMenuItems
 import com.LaursenJessen.bikeshare.components.home.HomeScreen
 import com.LaursenJessen.bikeshare.components.rentBike.BikeRentalDetails
 import com.LaursenJessen.bikeshare.components.rentBike.RentBikeView
-import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.LaursenJessen.bikeshare.authenticationStateViewModel.AuthenticationViewModel
 import com.LaursenJessen.bikeshare.components.rentOutBike.RentOutBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.addBikeStrava.AddBikeFromStravaView
 import com.LaursenJessen.bikeshare.components.rentOutBike.addBikes.AddBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.MyBikesView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.myBike.MyBikeView
+import com.LaursenJessen.bikeshare.components.rentOutBike.myRentals.MyRentalsView
+import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -80,6 +81,11 @@ fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, au
                 ScaffoldWithMenuContent(
                     scaffoldState, scope, menuItems, topBarText = "Add bike from Strava"
                 ) { AddBikeFromStravaView(nav = navController) }
+            }
+            authenticatedComposable("MyRentalsView", navController, authViewModel.isAuthenticated) {
+                ScaffoldWithMenuContent(
+                    scaffoldState, scope, menuItems, topBarText = "My rentals"
+                ) { MyRentalsView(nav = navController) }
             }
             authenticatedComposable(
                 "MyBikeView/{bikeId}", navController, authViewModel.isAuthenticated
