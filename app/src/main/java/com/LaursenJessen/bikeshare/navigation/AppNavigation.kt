@@ -1,6 +1,8 @@
 package com.LaursenJessen.bikeshare.components.navigation
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
@@ -17,18 +19,18 @@ import com.LaursenJessen.bikeshare.components.drawermenu.ScaffoldWithMenuContent
 import com.LaursenJessen.bikeshare.components.drawermenu.providers.getMenuItems
 import com.LaursenJessen.bikeshare.components.home.HomeScreen
 import com.LaursenJessen.bikeshare.components.home.PositionService
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.LaursenJessen.bikeshare.components.rentBike.BikeRentalDetails
 import com.LaursenJessen.bikeshare.components.rentBike.RentBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.RentOutBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.addBikeStrava.AddBikeFromStravaView
 import com.LaursenJessen.bikeshare.components.rentOutBike.addBikes.AddBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.MyBikesView
-import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.myBike.MyBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myRentals.MyRentalsView
+import com.LaursenJessen.bikeshare.components.rentoutbike.mybikes.mybike.MyBikeView
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.google.firebase.auth.FirebaseAuth
 
+@RequiresApi(Build.VERSION_CODES.S)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, auth: FirebaseAuth, locationService : PositionService) {
