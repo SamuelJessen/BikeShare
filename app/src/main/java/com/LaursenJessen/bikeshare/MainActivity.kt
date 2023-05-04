@@ -11,7 +11,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import com.LaursenJessen.bikeshare.components.home.PositionService
 import com.LaursenJessen.bikeshare.navigation.authentication.AuthenticationViewModel
+import com.LaursenJessen.bikeshare.components.navigation.AppNavigation
 import com.LaursenJessen.bikeshare.firestore.FireStore
+import com.LaursenJessen.bikeshare.authenticationStateViewModel.AuthenticationViewModel
 import com.LaursenJessen.bikeshare.ui.theme.BikeShareTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.ktx.auth
@@ -37,7 +39,7 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
         val service = FireStore(storage, api, auth) { auth.currentUser != null }
         setContent {
-            BikeShareTheme() {
+            BikeShareTheme(darkTheme = false) {
                 AppNavigation(authViewModel, service, auth, locationService)
             }
         }

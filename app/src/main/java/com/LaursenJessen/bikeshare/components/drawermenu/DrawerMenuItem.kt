@@ -8,7 +8,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -31,7 +30,7 @@ fun DrawerMenuItem(
                     .fillMaxWidth()
                     .clickable {
                         item.onClick()
-                        scope.launch { scaffoldState?.drawerState?.close() }
+                        scope.launch { scaffoldState.drawerState?.close() }
                     }
                     .padding(16.dp)
             ) {

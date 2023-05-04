@@ -1,4 +1,4 @@
-package com.LaursenJessen.bikeshare.components.rentoutbike
+package com.LaursenJessen.bikeshare.components.rentOutBike
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
@@ -8,7 +8,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun RentOutBikeView(nav: NavController) {
-    Column() {
+    Column {
         Text("Rent Out Bikes")
         Button(onClick = { nav.navigate("MyBikesView") }) {
             Text(text = "My bikes")
