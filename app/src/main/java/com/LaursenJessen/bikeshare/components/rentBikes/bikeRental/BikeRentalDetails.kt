@@ -117,7 +117,6 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
         )
     }
 
-
     bike.value?.let { bike ->
         Column(
             modifier = Modifier.padding(16.dp)
@@ -139,7 +138,7 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                     color = Color.Red,
                 )
             }
-            if (bike.imageUrl != null && bike.imageUrl != "null" && bike.imageUrl.isNotEmpty()) {
+            if (bike.imageUrl != "null" && bike.imageUrl.isNotEmpty()) {
                 Image(
                     painter = rememberImagePainter(bike.imageUrl),
                     contentDescription = "Bike Image",
@@ -151,14 +150,14 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
             } else {
                 Text(text = "No image for this bike")
             }
-            Text(text = "${bike.description}", style = MaterialTheme.typography.body1)
+            Text(text = bike.description, style = MaterialTheme.typography.body1)
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "Preliminary ride distance: ${bike.distance}Km",
                 style = MaterialTheme.typography.body1
             )
             Spacer(modifier = Modifier.height(40.dp))
-            if (bike.address.isNotEmpty() && bike.address != "null" && bike.address != null) {
+            if (bike.address.isNotEmpty() && bike.address != "null") {
                 GoogleMapsLocationButton(bike.address)
             } else {
                 Text(text = "No address for this bike")

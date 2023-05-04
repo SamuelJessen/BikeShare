@@ -33,6 +33,10 @@ fun BikeListItem(bike: Bike, nav: NavController) {
                 text = "Preliminary ride distance: ${bike.distance}km",
                 style = MaterialTheme.typography.body2
             )
+            Text(
+                text = "Price per day: ${bike.dailyPrice} DKK",
+                style = MaterialTheme.typography.body2
+            )
             if (!bike.rentedOut) {
                 Text(
                     text = "Status: Available",
@@ -46,7 +50,7 @@ fun BikeListItem(bike: Bike, nav: NavController) {
                     color = Color.Red
                 )
             }
-            if (bike.imageUrl != null && bike.imageUrl != "null" && bike.imageUrl.isNotEmpty()) {
+            if (bike.imageUrl != "null" && bike.imageUrl.isNotEmpty()) {
                 Image(
                     painter = rememberImagePainter(bike.imageUrl),
                     contentDescription = "Bike Image",
