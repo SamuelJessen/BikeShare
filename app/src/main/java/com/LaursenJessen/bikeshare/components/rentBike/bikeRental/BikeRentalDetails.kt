@@ -48,10 +48,14 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                         value = duration.value,
                         onValueChange = { duration.value = it },
                         valueRange = 1f..30f,
-                        modifier = Modifier.fillMaxWidth().height(50.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
                     )
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp),
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -62,7 +66,8 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = MaterialTheme.colors.error
                             ),
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier
+                                .weight(1f)
                                 .padding(end = 8.dp)
                         ) {
                             Text("Close", style = MaterialTheme.typography.body1)
@@ -84,7 +89,9 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                                 rentalProcess.value = rental
                             },
                             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary),
-                            modifier = Modifier.weight(1f).padding(start = 8.dp)
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 8.dp)
                         ) {
                             Text("Confirm", style = MaterialTheme.typography.body1)
                         }
@@ -106,7 +113,8 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                 }
             },
             confirmButton = { },
-            dismissButton = { })
+            dismissButton = { }
+        )
     }
 
 

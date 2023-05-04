@@ -85,7 +85,7 @@ fun AppNavigation(authViewModel: AuthenticationViewModel, service: FireStore, au
             authenticatedComposable("MyRentalsView", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(
                     scaffoldState, scope, menuItems, topBarText = "My rentals"
-                ) { MyRentalsView(nav = navController) }
+                ) { MyRentalsView(nav = navController, service = service) }
             }
             authenticatedComposable(
                 "MyBikeView/{bikeId}", navController, authViewModel.isAuthenticated
