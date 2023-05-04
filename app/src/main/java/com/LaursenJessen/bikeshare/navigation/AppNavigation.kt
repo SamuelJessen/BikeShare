@@ -19,8 +19,8 @@ import com.LaursenJessen.bikeshare.components.drawermenu.ScaffoldWithMenuContent
 import com.LaursenJessen.bikeshare.components.drawermenu.providers.getMenuItems
 import com.LaursenJessen.bikeshare.components.home.HomeScreen
 import com.LaursenJessen.bikeshare.components.home.PositionService
-import com.LaursenJessen.bikeshare.components.rentBike.BikeRentalDetails
-import com.LaursenJessen.bikeshare.components.rentBike.RentBikeView
+import com.LaursenJessen.bikeshare.components.rentBikes.BikeRentalDetails
+import com.LaursenJessen.bikeshare.components.rentBikes.RentBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.addBikes.AddBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.MyBikesView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.myBike.MyBikeView

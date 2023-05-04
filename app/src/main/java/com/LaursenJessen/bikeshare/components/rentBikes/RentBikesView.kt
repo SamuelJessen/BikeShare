@@ -1,4 +1,4 @@
-package com.LaursenJessen.bikeshare.components.rentBike
+package com.LaursenJessen.bikeshare.components.rentBikes
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn

@@ -1,17 +1,16 @@
 package com.LaursenJessen.bikeshare.components.rentOutBike.myRentals
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.LaursenJessen.bikeshare.firestore.models.Rental
@@ -70,24 +69,3 @@ fun MyRentalsView(service: FireStore, nav: NavController) {
     }
 }
 
-@Composable
-fun RentalListItem(rental: Rental, nav: NavController) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        elevation = 4.dp
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(text = rental.bike.name, style = MaterialTheme.typography.h6)
-            Text(text = "Rented by: ${rental.userEmail}", style = MaterialTheme.typography.subtitle1)
-            Text(text = "Duration: ${rental.rentDurationDays} days", style = MaterialTheme.typography.subtitle1)
-            Text(text = "Price: ${rental.dailyPrice} per day", style = MaterialTheme.typography.subtitle1)
-        }
-    }
-}
