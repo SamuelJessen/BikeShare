@@ -1,5 +1,6 @@
 package com.LaursenJessen.bikeshare.components.rentBike
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -89,6 +90,20 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                                 .padding(start = 8.dp)
                         ) {
                             Text("Confirm", style = MaterialTheme.typography.body1)
+                        }
+                        LaunchedEffect(rentalProcess.value) {
+                            rentalProcess.value?.let { rental ->
+                                try {
+                                    service.addRentalDocument(rental)
+                                    service.updateBikeRentedStatus(bikeId!!, rentedOut = true)
+                                    showDialog.value = false
+                                    rentalProcess.value = null
+                                    nav.navigate("RentBikeView")
+                                } catch (e: Exception) {
+                                    Log.e("Error adding rental", e.toString())
+                                    rentalProcess.value = null
+                                }
+                            }
                         }
                     }
                 }
