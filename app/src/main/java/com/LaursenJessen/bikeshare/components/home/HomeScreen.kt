@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun HomeScreen(nav: NavController) {
+fun HomeScreen(nav: NavController, positionService: PositionService) {
     Box(
         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
@@ -45,5 +45,6 @@ fun HomeScreen(nav: NavController) {
                 )
             }
         }
+        WeatherView(locationService = positionService, Modifier.weight(1f))
     }
 }
