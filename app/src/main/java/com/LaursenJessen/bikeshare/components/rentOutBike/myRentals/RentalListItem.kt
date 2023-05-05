@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.firestore.models.Rental
+import com.LaursenJessen.bikeshare.services.firestore.models.Rental
 
 @Composable
 fun RentalListItem(rental: Rental, nav: NavController) {

@@ -13,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.LaursenJessen.bikeshare.firestore.models.Bike
+import com.LaursenJessen.bikeshare.services.firestore.FireStore
+import com.LaursenJessen.bikeshare.services.firestore.models.Bike
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
@@ -49,7 +49,6 @@ fun RentBikeView(service: FireStore, nav: NavController) {
         },
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { query ->
@@ -72,7 +71,7 @@ fun RentBikeView(service: FireStore, nav: NavController) {
                     modifier = Modifier.fillMaxSize().padding(top = 20.dp), contentAlignment = Alignment.TopCenter
                 ) {
                     Text(
-                        text = "No bikes available for rent",
+                        text = "No bikes found",
                         style = MaterialTheme.typography.subtitle1
                     )
                 }

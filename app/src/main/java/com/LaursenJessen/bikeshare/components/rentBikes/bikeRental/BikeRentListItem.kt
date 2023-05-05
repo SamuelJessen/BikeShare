@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.LaursenJessen.bikeshare.components.helpers.BikeImageWithIconFallback
-import com.LaursenJessen.bikeshare.firestore.models.Bike
+import com.LaursenJessen.bikeshare.services.firestore.models.Bike
 
 @Composable
 fun BikeRentListItem(bike: Bike, nav: NavController) {

@@ -3,6 +3,7 @@ package com.LaursenJessen.bikeshare.components.drawermenu
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,9 +16,10 @@ fun DrawerMenuHeader() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 20.dp),
-        contentAlignment = Alignment.Center
+            .padding(vertical = 10.dp),
+        contentAlignment = Alignment.CenterStart
     ) {
-        Text(text = "Menu", fontSize = 20.sp)
+        Text(text = "Menu", fontSize = 30.sp, modifier = Modifier.padding(start = 15.dp))
     }
+    Divider()
 }
