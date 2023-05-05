@@ -9,5 +9,5 @@ data class Bike(
     val distance:Int,
     val rentedOut:Boolean,
     val userId:String,
-    val imageUrl:String
+    var imageUrl:String
 )
