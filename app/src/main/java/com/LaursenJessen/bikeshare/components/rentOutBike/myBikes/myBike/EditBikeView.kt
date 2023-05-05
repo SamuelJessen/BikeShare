@@ -58,7 +58,7 @@ fun EditBikeView(service: FireStore, nav: NavController) {
             description.value = fetchedBike.description
             rentedOut.value = fetchedBike.rentedOut
             selectedImage = fetchedBike.imageUrl.toUri()
-            if (fetchedBike.imageUrl == "") {
+            if (selectedImage.toString() == "") {
                 selectedImage = null;
             }
         }
@@ -144,16 +144,20 @@ fun EditBikeView(service: FireStore, nav: NavController) {
                                     rentedOut = rentedOut.value,
                                 )
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    val imageUrl = selectedImage?.let {
-                                        uploadImageAndGetUrl(
-                                            storage,
-                                            it,
-                                            bikeId ?: ""
-                                        )
+                                    if(selectedImage != null){
+                                        val imageUrl = selectedImage?.let {
+                                            uploadImageAndGetUrl(
+                                                storage,
+                                                it,
+                                                bikeId ?: ""
+                                            )
+                                        }
+                                        if (imageUrl != null) {
+                                            updatedBike.imageUrl = imageUrl
+                                        }
                                     }
-                                    if (imageUrl != null) {
-                                        updatedBike.imageUrl = imageUrl
-                                    } else {
+                                    else
+                                    {
                                         updatedBike.imageUrl = ""
                                     }
                                     service.updateBike(updatedBike)
