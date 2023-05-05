@@ -49,7 +49,7 @@ fun HomeScreen(nav: NavController, positionService: PositionService) {
                     onClick = { nav.navigate("MyBikesView") }, modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "Rent my bike", style = MaterialTheme.typography.button
+                        text = "Rent out my bike", style = MaterialTheme.typography.button
                     )
                 }
             }
