@@ -97,50 +97,51 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                         onCheckedChange = { rentedOut.value = !it },
                         modifier = Modifier.alignByBaseline(),
                     )
-                }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Button(
+                        onClick = {
+                            val bike = Bike(
+                                id = UUID.randomUUID().toString(),
+                                address = address.value,
+                                name = name.value,
+                                dailyPrice = dailyPrice.value.toDouble().toInt(),
+                                distance = distance.value.toDouble().toInt(),
+                                description = description.value,
+                                rentedOut = rentedOut.value,
+                                userId = service.auth.uid.toString(),
+                                imageUrl = ""
+                            )
 
-                Button(
-                    onClick = {
-                        val bike = Bike(
-                            id = UUID.randomUUID().toString(),
-                            address = address.value,
-                            name = name.value,
-                            dailyPrice = dailyPrice.value.toDouble().toInt(),
-                            distance = distance.value.toDouble().toInt(),
-                            description = description.value,
-                            rentedOut = rentedOut.value,
-                            userId = service.auth.uid.toString(),
-                            imageUrl = ""
-                        )
+                            val storageRef = storage.reference.child("images/${bike.id}")
+                            selectedImage?.let { uri ->
+                                storageRef.putFile(uri)
+                                    .addOnSuccessListener {
+                                        storageRef.downloadUrl
+                                            .addOnSuccessListener { uri ->
+                                                bike.imageUrl = uri.toString()
 
-                        val storageRef = storage.reference.child("images/${bike.id}")
-                        selectedImage?.let { uri ->
-                            storageRef.putFile(uri)
-                                .addOnSuccessListener {
-                                    storageRef.downloadUrl
-                                        .addOnSuccessListener { uri ->
-                                            bike.imageUrl = uri.toString()
-
-                                            CoroutineScope(Dispatchers.IO).launch {
-                                                service.addBike(bike)
+                                                CoroutineScope(Dispatchers.IO).launch {
+                                                    service.addBike(bike)
+                                                }
+                                                nav.navigate("MyBikesView")
                                             }
-                                            nav.navigate("MyBikesView")
-                                        }
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        Log.e("AddBikeView", "Error uploading image to Firebase Storage: $exception")
+                                    }
+                            } ?: run {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    service.addBike(bike)
                                 }
-                                .addOnFailureListener { exception ->
-                                    Log.e("AddBikeView", "Error uploading image to Firebase Storage: $exception")
-                                }
-                        } ?: run {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                service.addBike(bike)
+                                nav.navigate("MyBikesView")
                             }
-                            nav.navigate("MyBikesView")
-                        }
-                    },
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    Text(text = "Add bike")
+                        },
+                    ) {
+                        Text(text = "Add bike")
+                    }
                 }
+
+
             }
         }
     }

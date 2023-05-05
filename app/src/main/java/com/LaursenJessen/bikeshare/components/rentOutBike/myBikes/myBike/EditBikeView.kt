@@ -131,6 +131,7 @@ fun EditBikeView(service: FireStore, nav: NavController) {
                         onCheckedChange = { rentedOut.value = !it },
                         modifier = Modifier.alignByBaseline(),
                     )
+                    Spacer(modifier = Modifier.weight(1f))
                     Button(
                         onClick = {
                             bike?.value?.let {
@@ -166,8 +167,6 @@ fun EditBikeView(service: FireStore, nav: NavController) {
                         Text(text = "Save Changes")
                     }
                 }
-
-
             }
         }
     }
