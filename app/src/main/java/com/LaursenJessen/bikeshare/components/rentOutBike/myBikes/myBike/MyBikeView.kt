@@ -12,8 +12,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.LaursenJessen.bikeshare.firestore.models.Bike
 import com.LaursenJessen.bikeshare.firestore.FireStore
+import com.LaursenJessen.bikeshare.firestore.models.Bike
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -127,7 +127,7 @@ fun MyBikeView(
                     Spacer(modifier = Modifier.width(16.dp))
                     Button(
                         onClick = {
-                            nav.navigate("EditBike")
+                            nav.navigate("EditBikeView/${it.id}")
                         },
                         modifier = Modifier.weight(1f)
                     ) {
