@@ -14,15 +14,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.LaursenJessen.bikeshare.firestore.models.Bike
 import com.LaursenJessen.bikeshare.firestore.FireStore
+import com.LaursenJessen.bikeshare.firestore.models.Bike
 
 @Composable
 fun MyBikesView(service: FireStore, nav: NavController) {
     val bikes = remember { mutableStateOf(emptyList<Bike>()) }
     LaunchedEffect(Unit) {
-        val list = service.getBikes()
-        bikes.value = list
+        bikes.value = service.getBikes()
     }
     var expanded by remember { mutableStateOf(false) }
     Column {

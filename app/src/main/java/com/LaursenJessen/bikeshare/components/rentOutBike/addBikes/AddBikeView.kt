@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.LaursenJessen.bikeshare.firestore.FireStore
@@ -40,7 +41,10 @@ fun AddBikeView(service: FireStore, nav: NavController) {
         contract = ActivityResultContracts.GetContent()) {uri ->
         selectedImage = uri
     }
-    LazyColumn(modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(bottom = 16.dp)){
+    LazyColumn(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentHeight()
+        .padding(bottom = 16.dp)){
         item {
             Column(
                 modifier = Modifier
@@ -109,13 +113,10 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                             imageUrl = ""
                         )
 
-                        // Create a storage reference for the image file
-                        val storageRef = storage.reference.child("images/${UUID.randomUUID()}")
+                        val storageRef = storage.reference.child("images/${bike.id}")
                         selectedImage?.let { uri ->
-                            // Upload the image data to Firebase Storage
                             storageRef.putFile(uri)
                                 .addOnSuccessListener {
-                                    // Get the download URL for the image
                                     storageRef.downloadUrl
                                         .addOnSuccessListener { uri ->
                                             bike.imageUrl = uri.toString()
@@ -143,14 +144,14 @@ fun AddBikeView(service: FireStore, nav: NavController) {
             }
         }
     }
-
 }
 
 @Composable
-private fun ImageContent(selectedImage: Uri? = null, onImageClick: () -> Unit) {
+fun ImageContent(selectedImage: Uri? = null, onImageClick: () -> Unit) {
     Box(
-        Modifier.height(if(selectedImage!=null){200.dp}
-        else {80.dp})) {
+        modifier = Modifier.height(if(selectedImage!=null){200.dp}
+        else {80.dp}),
+        contentAlignment = Alignment.Center) {
         Row(
             modifier = Modifier.padding(vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -165,8 +166,19 @@ private fun ImageContent(selectedImage: Uri? = null, onImageClick: () -> Unit) {
                             onImageClick()
                         })
             } else
-                OutlinedButton(onClick = onImageClick) {
-                    Text(text = "Choose Image")
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OutlinedButton(
+                        onClick = onImageClick,
+                        modifier = Modifier.width(200.dp)
+                    ) {
+                        Text(
+                            text = "Choose Image",
+                            fontSize = 16.sp
+                        )
+                    }
                 }
         }
     }
