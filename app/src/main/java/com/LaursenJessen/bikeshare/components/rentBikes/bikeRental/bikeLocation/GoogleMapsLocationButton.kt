@@ -1,4 +1,4 @@
-package com.LaursenJessen.bikeshare.components.rentBike
+package com.LaursenJessen.bikeshare.components.rentBikes
 
 import android.content.Intent
 import android.net.Uri

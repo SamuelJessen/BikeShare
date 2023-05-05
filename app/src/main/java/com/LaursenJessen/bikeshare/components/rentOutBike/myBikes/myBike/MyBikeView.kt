@@ -1,6 +1,5 @@
 package com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.myBike
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,13 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.BikeImageWithIconFallback
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.LaursenJessen.bikeshare.firestore.models.Bike
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun MyBikeView(
@@ -77,21 +75,20 @@ fun MyBikeView(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    painter = rememberImagePainter(it.imageUrl),
+                BikeImageWithIconFallback(
+                    imageUrl = it.imageUrl,
                     contentDescription = "Bike image",
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
-                        .clip(MaterialTheme.shapes.medium)
+                        .clip(MaterialTheme.shapes.medium),
+                    iconSize = 150.dp
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                it.name.let {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.h4
-                    )
-                }
+                Text(
+                    text = it.name,
+                    style = MaterialTheme.typography.h4
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "Address: ${it.address}",
