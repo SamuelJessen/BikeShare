@@ -7,6 +7,7 @@ import com.LaursenJessen.bikeshare.firestore.models.User
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
@@ -164,6 +165,28 @@ class FireStore(
         }
     }
 
+    suspend fun updateBike(updatedBike: Bike) {
+        return suspendCoroutine { continuation ->
+            api.collection("Bikes").document(updatedBike.id).set(
+                mapOf(
+                    "Address" to updatedBike.address,
+                    "Description" to updatedBike.description,
+                    "Name" to updatedBike.name,
+                    "DailyPrice" to updatedBike.dailyPrice,
+                    "Distance" to updatedBike.distance,
+                    "RentedOut" to updatedBike.rentedOut,
+                    "UserId" to updatedBike.userId,
+                    "ImageUrl" to updatedBike.imageUrl
+                ), SetOptions.merge()
+            ).addOnSuccessListener {
+                Log.d(TAG, "Bike ${updatedBike.id} updated successfully")
+                continuation.resume(Unit)
+            }.addOnFailureListener { e ->
+                Log.w(TAG, "Error updating bike ${updatedBike.id}", e)
+                continuation.resumeWithException(e)
+            }
+        }
+    }
 
     suspend fun addBike(bike: Bike) = suspendCoroutine { continuation ->
         api.collection("Bikes").document(bike.id).set(
