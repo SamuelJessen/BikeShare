@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.BikeImageWithIconFallback
+import com.LaursenJessen.bikeshare.components.helpers.BikeImageWithIconFallback
 import com.LaursenJessen.bikeshare.firestore.FireStore
 import com.LaursenJessen.bikeshare.firestore.models.Bike
 import kotlinx.coroutines.CoroutineScope

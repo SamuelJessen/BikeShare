@@ -57,7 +57,7 @@ fun MyRentalsView(service: FireStore, nav: NavController) {
             Box(
                 modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
             ) {
-                Text("No one wanted to rent your bikes", style = MaterialTheme.typography.h6)
+                Text("You currently have no rentals", style = MaterialTheme.typography.h6)
             }
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {

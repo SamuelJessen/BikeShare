@@ -4,10 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,7 +15,6 @@ import com.LaursenJessen.bikeshare.firestore.models.Bike
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun RentBikeView(service: FireStore, nav: NavController) {
@@ -61,23 +57,31 @@ fun RentBikeView(service: FireStore, nav: NavController) {
                     modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "No available bikes", style = MaterialTheme.typography.subtitle1
+                        text = "No bikes available for rent", style = MaterialTheme.typography.subtitle1
                     )
                 }
             } else {
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { query ->
-                        searchQuery = query
-                    },
-                    label = { Text("Search bikes") },
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp, horizontal = 16.dp)
-                )
+                        .padding(vertical = 0.dp, horizontal = 0.dp),
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = 4.dp
+                ) {
+                    OutlinedTextField(
+                        value = searchQuery,
+                        onValueChange = { query ->
+                            searchQuery = query
+                        },
+                        label = { Text("Search bikes") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    )
+                }
                 LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
                     items(availableBikes) { bike ->
-                        BikeListItem(bike = bike, nav = nav)
+                        BikeRentListItem(bike = bike, nav = nav)
                     }
                 }
             }

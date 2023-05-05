@@ -1,6 +1,5 @@
 package com.LaursenJessen.bikeshare.components.rentBikes
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,14 +10,15 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import com.LaursenJessen.bikeshare.components.helpers.BikeImageWithIconFallback
 import com.LaursenJessen.bikeshare.firestore.models.Bike
 
 @Composable
-fun BikeListItem(bike: Bike, nav: NavController) {
+fun BikeRentListItem(bike: Bike, nav: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,18 +50,16 @@ fun BikeListItem(bike: Bike, nav: NavController) {
                     color = Color.Red
                 )
             }
-            if (bike.imageUrl != "null" && bike.imageUrl.isNotEmpty()) {
-                Image(
-                    painter = rememberImagePainter(bike.imageUrl),
-                    contentDescription = "Bike Image",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(vertical = 16.dp)
-                )
-            } else {
-                Text(text = "No image for this bike")
-            }
+            BikeImageWithIconFallback(
+                imageUrl = bike.imageUrl,
+                contentDescription = "Bike image",
+                modifier = Modifier
+                    .height(200.dp)
+                    .fillMaxWidth()
+                    .padding(vertical = 0.dp)
+                    .clip(MaterialTheme.shapes.medium),
+                iconSize = 120.dp
+            )
             Button(onClick = { nav.navigate("BikeRental/${bike.id}") }) {
                 Text(text = "Show")
             }
