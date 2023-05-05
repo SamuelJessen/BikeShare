@@ -23,6 +23,7 @@ import com.LaursenJessen.bikeshare.components.rentBikes.BikeRentalDetails
 import com.LaursenJessen.bikeshare.components.rentBikes.RentBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.addBikes.AddBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.MyBikesView
+import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.myBike.EditBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.myBike.MyBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myRentals.MyRentalsView
 import com.LaursenJessen.bikeshare.firestore.FireStore
@@ -89,6 +90,13 @@ fun AppNavigation(
                 ScaffoldWithMenuContent(
                     scaffoldState, scope, menuItems, topBarText = "My bike"
                 ) { MyBikeView(nav = navController, service = service) }
+            }
+            authenticatedComposable(
+                "EditBikeView/{bikeId}", navController, authViewModel.isAuthenticated
+            ) {
+                ScaffoldWithMenuContent(
+                    scaffoldState, scope, menuItems, topBarText = "Edit bike"
+                ) { EditBikeView(nav = navController, service = service) }
             }
             authenticatedComposable(
                 "BikeRental/{bikeId}", navController, authViewModel.isAuthenticated

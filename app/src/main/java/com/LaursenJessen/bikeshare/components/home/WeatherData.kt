@@ -125,7 +125,7 @@ fun WeatherView(locationService : PositionService) {
         val location = locationService.getCurrentLocation()
         isLoading.value = true
         data.value = weatherService.get(location.latitude.toString(),location.longitude.toString())
-        Log.e("WeatherData",data.value.toString())
+        Log.d("WeatherData",data.value.toString())
         isLoading.value = false
     }
     DisposableEffect(Unit) { onDispose { weatherService.close() } }

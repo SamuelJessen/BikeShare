@@ -124,7 +124,7 @@ fun MyBikeView(
                     Spacer(modifier = Modifier.width(16.dp))
                     Button(
                         onClick = {
-                            nav.navigate("EditBike")
+                            nav.navigate("EditBikeView/${it.id}")
                         },
                         modifier = Modifier.weight(1f)
                     ) {
