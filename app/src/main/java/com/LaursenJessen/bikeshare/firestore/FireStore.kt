@@ -18,7 +18,6 @@ class FireStore(
     private val storage: FirebaseStorage,
     private val api: FirebaseFirestore,
     val auth: FirebaseAuth,
-    private val isLoggedInChanged: (Boolean) -> Unit
 ) {
     companion object {
         const val TAG = "FIRE_STORE_SERVICE"

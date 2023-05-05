@@ -42,8 +42,6 @@ fun MyBikesView(service: FireStore, nav: NavController) {
 
     val bikesForUser = bikes.value.filter { it.userId == service.auth.uid }
     
-    var expanded by remember { mutableStateOf(false) }
-
     Column() {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -52,20 +50,8 @@ fun MyBikesView(service: FireStore, nav: NavController) {
                 modifier = Modifier.padding(5.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = { expanded = true }) {
+            IconButton(onClick = { nav.navigate("AddBike") }) {
                 Icon(Icons.Filled.Add, contentDescription = "Add")
-            }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                DropdownMenuItem(onClick = {
-                    nav.navigate("AddBike")
-                    expanded = false
-                }) {
-                    Text(text = "Add bike manually")
-                }
             }
         }
         LazyColumn(modifier = Modifier

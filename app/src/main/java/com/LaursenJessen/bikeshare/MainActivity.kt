@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
         val api = FirebaseFirestore.getInstance()
         val storage = FirebaseStorage.getInstance()
         FirebaseApp.initializeApp(this)
-        val service = FireStore(storage, api, auth) { auth.currentUser != null }
+        val service = FireStore(storage, api, auth)
         setContent {
             BikeShareTheme(darkTheme = false) {
                 AppNavigation(authViewModel = authViewModel, service = service, auth = auth, locationService = locationService)
