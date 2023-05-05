@@ -151,7 +151,7 @@ fun WeatherView(locationService : PositionService) {
                 ) {
                     Text(
                         text = "Current weather:",
-                        fontSize = 35.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Row(

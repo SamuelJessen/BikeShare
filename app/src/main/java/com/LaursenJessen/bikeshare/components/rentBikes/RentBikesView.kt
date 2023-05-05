@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +49,18 @@ fun RentBikeView(service: FireStore, nav: NavController) {
         },
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
+
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { query ->
+                        searchQuery = query
+                    },
+                    label = { Text("Search bikes") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 15.dp, end = 15.dp, bottom = 5.dp)
+                )
+
             if (bikeList.value.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
@@ -54,31 +69,14 @@ fun RentBikeView(service: FireStore, nav: NavController) {
                 }
             } else if (availableBikes.isEmpty()) {
                 Box(
-                    modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+                    modifier = Modifier.fillMaxSize().padding(top = 20.dp), contentAlignment = Alignment.TopCenter
                 ) {
                     Text(
-                        text = "No bikes available for rent", style = MaterialTheme.typography.subtitle1
+                        text = "No bikes available for rent",
+                        style = MaterialTheme.typography.subtitle1
                     )
                 }
             } else {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 0.dp, horizontal = 0.dp),
-                    shape = MaterialTheme.shapes.medium,
-                    elevation = 4.dp
-                ) {
-                    OutlinedTextField(
-                        value = searchQuery,
-                        onValueChange = { query ->
-                            searchQuery = query
-                        },
-                        label = { Text("Search bikes") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    )
-                }
                 LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
                     items(availableBikes) { bike ->
                         BikeRentListItem(bike = bike, nav = nav)
@@ -88,3 +86,5 @@ fun RentBikeView(service: FireStore, nav: NavController) {
         }
     }
 }
+
+
