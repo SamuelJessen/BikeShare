@@ -77,7 +77,7 @@ fun MyRentalsView(service: FireStore, nav: NavController) {
                 Spacer(modifier = Modifier.height(10.dp))
                 LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
                     itemsIndexed(rentalList.value) { _, rental ->
-                        RentalListItem(rental = rental, nav = nav)
+                        RentalListItem(rental = rental)
                     }
                 }
             }

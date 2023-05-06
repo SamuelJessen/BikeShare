@@ -20,7 +20,6 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : ComponentActivity() {
     private val authViewModel by viewModels<AuthenticationViewModel>()
@@ -34,9 +33,8 @@ class MainActivity : ComponentActivity() {
         locationService = PositionService(fusedLocationClient, this)
         val auth = Firebase.auth
         val api = FirebaseFirestore.getInstance()
-        val storage = FirebaseStorage.getInstance()
         FirebaseApp.initializeApp(this)
-        val service = FireStore(storage, api, auth)
+        val service = FireStore(api, auth)
         setContent {
             BikeShareTheme(darkTheme = false) {
                 AppNavigation(
