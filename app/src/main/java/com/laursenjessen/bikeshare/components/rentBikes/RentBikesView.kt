@@ -33,8 +33,7 @@ fun RentBikeView(service: FireStore, nav: NavController) {
 
     val availableBikes = bikeList.value.filter { bike ->
         !bike.rentedOut && bike.userId != service.auth.uid && bike.name.contains(
-            searchQuery,
-            ignoreCase = true
+            searchQuery, ignoreCase = true
         )
     }
 
@@ -49,16 +48,16 @@ fun RentBikeView(service: FireStore, nav: NavController) {
         },
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { query ->
-                        searchQuery = query
-                    },
-                    label = { Text("Search bikes") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 15.dp, end = 15.dp, bottom = 5.dp)
-                )
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { query ->
+                    searchQuery = query
+                },
+                label = { Text("Search bikes") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp, bottom = 5.dp)
+            )
 
             if (bikeList.value.isEmpty()) {
                 Box(
@@ -68,11 +67,13 @@ fun RentBikeView(service: FireStore, nav: NavController) {
                 }
             } else if (availableBikes.isEmpty()) {
                 Box(
-                    modifier = Modifier.fillMaxSize().padding(top = 20.dp), contentAlignment = Alignment.TopCenter
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 20.dp),
+                    contentAlignment = Alignment.TopCenter
                 ) {
                     Text(
-                        text = "No bikes found",
-                        style = MaterialTheme.typography.subtitle1
+                        text = "No bikes found", style = MaterialTheme.typography.subtitle1
                     )
                 }
             } else {

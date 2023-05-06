@@ -51,8 +51,7 @@ fun Signup(service: FireStore, nav: NavController, authViewModel: Authentication
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        OutlinedTextField(
-            value = email.value,
+        OutlinedTextField(value = email.value,
             onValueChange = { newText -> email.value = newText },
             label = { Text("Email") },
             modifier = Modifier
@@ -66,8 +65,7 @@ fun Signup(service: FireStore, nav: NavController, authViewModel: Authentication
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        OutlinedTextField(
-            value = password.value,
+        OutlinedTextField(value = password.value,
             onValueChange = { newText -> password.value = newText },
             label = { Text("Password") },
             modifier = Modifier
@@ -84,8 +82,8 @@ fun Signup(service: FireStore, nav: NavController, authViewModel: Authentication
                         authViewModel.setAuthenticated(true)
                         nav.navigate("HomeScreen")
                     } catch (e: Exception) {
-                        Log.e("Login", "Exception during login", e)
-                        errorMessage = "Log in failed: ${e.localizedMessage}"
+                        Log.e("Signup", "Exception during Signup", e)
+                        errorMessage = "Signup failed: ${e.localizedMessage}"
                     }
                 }
                 keyboardController?.hide()
@@ -97,8 +95,7 @@ fun Signup(service: FireStore, nav: NavController, authViewModel: Authentication
                         contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
                     )
                 }
-            }
-        )
+            })
 
         Spacer(modifier = Modifier.height(16.dp))
 

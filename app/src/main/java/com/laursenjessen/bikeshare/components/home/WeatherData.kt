@@ -29,7 +29,7 @@ import io.ktor.serialization.kotlinx.json.*
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun WeatherView(locationService : PositionService) {
+fun WeatherView(locationService: PositionService) {
     val weatherService = KtorWeatherService()
     val data = remember { mutableStateOf<WeatherData?>(null) }
     val isLoading = remember { mutableStateOf(false) }
@@ -40,13 +40,12 @@ fun WeatherView(locationService : PositionService) {
         }
         val location = locationService.getCurrentLocation()
         isLoading.value = true
-        data.value = weatherService.get(location.latitude.toString(),location.longitude.toString())
-        Log.d("WeatherData",data.value.toString())
+        data.value = weatherService.get(location.latitude.toString(), location.longitude.toString())
+        Log.d("WeatherData", data.value.toString())
         isLoading.value = false
     }
     DisposableEffect(Unit) { onDispose { weatherService.close() } }
-    Box(
-    ) {
+    Box {
         if (isLoading.value) {
             Column(
                 Modifier.padding(16.dp),
@@ -55,8 +54,7 @@ fun WeatherView(locationService : PositionService) {
             ) {
                 CircularProgressIndicator()
                 Text(
-                    "Loading weather data...",
-                    Modifier.padding(top = 8.dp)
+                    "Loading weather data...", Modifier.padding(top = 8.dp)
                 )
             }
         } else {
@@ -66,9 +64,7 @@ fun WeatherView(locationService : PositionService) {
                     verticalArrangement = Arrangement.spacedBy(15.dp)
                 ) {
                     Text(
-                        text = "Current weather:",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
+                        text = "Current weather:", fontSize = 20.sp, fontWeight = FontWeight.Bold
                     )
                     Row(
                         verticalAlignment = Alignment.CenterVertically

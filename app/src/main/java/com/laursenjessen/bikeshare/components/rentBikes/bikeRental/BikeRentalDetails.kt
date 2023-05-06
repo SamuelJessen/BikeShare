@@ -62,11 +62,9 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                         Button(
                             onClick = {
                                 showDialog.value = false
-                            },
-                            colors = ButtonDefaults.buttonColors(
+                            }, colors = ButtonDefaults.buttonColors(
                                 backgroundColor = MaterialTheme.colors.error
-                            ),
-                            modifier = Modifier
+                            ), modifier = Modifier
                                 .weight(1f)
                                 .padding(end = 8.dp)
                         ) {
@@ -112,8 +110,7 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                 }
             },
             confirmButton = { },
-            dismissButton = { }
-        )
+            dismissButton = { })
     }
 
     bike.value?.let { bike ->

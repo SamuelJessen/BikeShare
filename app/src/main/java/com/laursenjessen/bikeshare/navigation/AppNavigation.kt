@@ -70,7 +70,12 @@ fun AppNavigation(
             }
             authenticatedComposable("AddBike", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(
-                    scaffoldState, scope, menuItems, topBarText = "Add bike", nav = navController, showBackButton = true
+                    scaffoldState,
+                    scope,
+                    menuItems,
+                    topBarText = "Add bike",
+                    nav = navController,
+                    showBackButton = true
                 ) { AddBikeView(nav = navController, service = service) }
             }
 
@@ -88,14 +93,24 @@ fun AppNavigation(
                 "MyBikeView/{bikeId}", navController, authViewModel.isAuthenticated
             ) {
                 ScaffoldWithMenuContent(
-                    scaffoldState, scope, menuItems, topBarText = "My bike", nav = navController, showBackButton = true
+                    scaffoldState,
+                    scope,
+                    menuItems,
+                    topBarText = "My bike",
+                    nav = navController,
+                    showBackButton = true
                 ) { MyBikeView(nav = navController, service = service) }
             }
             authenticatedComposable(
                 "EditBikeView/{bikeId}", navController, authViewModel.isAuthenticated
             ) {
                 ScaffoldWithMenuContent(
-                    scaffoldState, scope, menuItems, topBarText = "Edit bike", nav = navController, showBackButton = true
+                    scaffoldState,
+                    scope,
+                    menuItems,
+                    topBarText = "Edit bike",
+                    nav = navController,
+                    showBackButton = true
                 ) { EditBikeView(nav = navController, service = service) }
             }
             authenticatedComposable(

@@ -120,8 +120,7 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         if (loading.value) {
                             CircularProgressIndicator()
-                        }
-                        else{
+                        } else {
                             Button(
                                 onClick = {
                                     loading.value = true

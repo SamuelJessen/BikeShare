@@ -30,8 +30,7 @@ class PositionService(
         return suspendCoroutine { continuation ->
             try {
                 client.getCurrentLocation(
-                    LocationRequest.QUALITY_HIGH_ACCURACY,
-                    null
+                    LocationRequest.QUALITY_HIGH_ACCURACY, null
                 ).addOnSuccessListener {
                     continuation.resume(it)
                 }.addOnFailureListener {
@@ -43,10 +42,10 @@ class PositionService(
             }
         }
     }
+
     private fun checkPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
-            activity,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            activity, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -54,9 +53,7 @@ class PositionService(
         if (!checkPermission()) {
             locationOn.value = false
             ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_ID
+                activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_ID
             )
         } else {
             locationOn.value = true

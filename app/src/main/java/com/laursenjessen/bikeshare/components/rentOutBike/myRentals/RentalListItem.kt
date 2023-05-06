@@ -10,16 +10,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.laursenjessen.bikeshare.services.firestore.models.Rental
 
 @Composable
-fun RentalListItem(rental: Rental, nav: NavController) {
+fun RentalListItem(rental: Rental) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        elevation = 4.dp
+            .padding(8.dp), elevation = 4.dp
     ) {
         Column(
             modifier = Modifier
@@ -28,9 +26,18 @@ fun RentalListItem(rental: Rental, nav: NavController) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(text = rental.bike.name, style = MaterialTheme.typography.h6)
-            Text(text = "Rented by: ${rental.userEmail}", style = MaterialTheme.typography.subtitle1)
-            Text(text = "Duration: ${rental.rentDurationDays} days", style = MaterialTheme.typography.subtitle1)
-            Text(text = "Price payed: ${rental.dailyPrice} (DKK)", style = MaterialTheme.typography.subtitle1)
+            Text(
+                text = "Rented by: ${rental.userEmail}",
+                style = MaterialTheme.typography.subtitle1
+            )
+            Text(
+                text = "Duration: ${rental.rentDurationDays} days",
+                style = MaterialTheme.typography.subtitle1
+            )
+            Text(
+                text = "Price payed: ${rental.dailyPrice} (DKK)",
+                style = MaterialTheme.typography.subtitle1
+            )
         }
     }
 }

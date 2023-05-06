@@ -13,7 +13,7 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-interface WeatherService{
+interface WeatherService {
     suspend fun get(lat: String, longit: String): WeatherData?
 }
 
@@ -35,21 +35,14 @@ class KtorWeatherService : WeatherService {
         }
     }
 
-    override suspend fun get(lat: String,longit: String): WeatherData? {
+    override suspend fun get(lat: String, longit: String): WeatherData? {
         return try {
             client.get {
                 url(baseUrlPost)
-                parameter("latitude",lat)
-                parameter("longitude",longit)
-                parameter("timezone","Europe/Berlin")
-                parameter("current_weather",true)
-                /*Log.e("url",client.get() {
-                    url("$baseUrlPost")
-                    parameter("latitude",lat)
-                    parameter("longitude",longit)
-                    parameter("timezone","Europe/Berlin")
-                    parameter("current_weather",true)
-                }.body<String>().toString())*/
+                parameter("latitude", lat)
+                parameter("longitude", longit)
+                parameter("timezone", "Europe/Berlin")
+                parameter("current_weather", true)
             }.body()
         } catch (e: Exception) {
             Log.v("WEATHER SERVICE", e.toString())

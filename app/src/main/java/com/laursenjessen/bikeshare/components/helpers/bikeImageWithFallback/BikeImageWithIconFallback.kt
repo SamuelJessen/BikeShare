@@ -11,9 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.Dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun BikeImageWithIconFallback(
     imageUrl: String?,
@@ -21,12 +23,9 @@ fun BikeImageWithIconFallback(
     contentDescription: String? = null,
     iconSize: Dp
 ) {
-    val painter = rememberImagePainter(
-        data = imageUrl,
-        builder = {
-            crossfade(true)
-        }
-    )
+    val painter = rememberImagePainter(data = imageUrl, builder = {
+        crossfade(true)
+    })
 
     Box(modifier = modifier) {
         Image(
