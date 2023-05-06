@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
     private val authViewModel by viewModels<AuthenticationViewModel>()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationService: PositionService
+
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +39,12 @@ class MainActivity : ComponentActivity() {
         val service = FireStore(storage, api, auth)
         setContent {
             BikeShareTheme(darkTheme = false) {
-                AppNavigation(authViewModel = authViewModel, service = service, auth = auth, locationService = locationService)
+                AppNavigation(
+                    authViewModel = authViewModel,
+                    service = service,
+                    auth = auth,
+                    locationService = locationService
+                )
             }
         }
     }

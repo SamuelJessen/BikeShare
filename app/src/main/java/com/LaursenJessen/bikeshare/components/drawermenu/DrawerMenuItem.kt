@@ -25,24 +25,19 @@ fun DrawerMenuItem(
 ) {
     LazyColumn(modifier) {
         items(menuItems) { item ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        item.onClick()
-                        scope.launch { scaffoldState.drawerState.close() }
-                    }
-                    .padding(16.dp)
-            ) {
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    item.onClick()
+                    scope.launch { scaffoldState.drawerState.close() }
+                }
+                .padding(16.dp)) {
                 Icon(
-                    imageVector = item.iconVector,
-                    contentDescription = item.contentDescription
+                    imageVector = item.iconVector, contentDescription = item.contentDescription
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = item.title,
-                    style = itemTextStyle,
-                    modifier = Modifier.weight(1f)
+                    text = item.title, style = itemTextStyle, modifier = Modifier.weight(1f)
                 )
             }
         }

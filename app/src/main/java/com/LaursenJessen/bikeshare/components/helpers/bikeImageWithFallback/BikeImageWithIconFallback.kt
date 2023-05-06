@@ -21,12 +21,9 @@ fun BikeImageWithIconFallback(
     contentDescription: String? = null,
     iconSize: Dp
 ) {
-    val painter = rememberImagePainter(
-        data = imageUrl,
-        builder = {
-            crossfade(true)
-        }
-    )
+    val painter = rememberImagePainter(data = imageUrl, builder = {
+        crossfade(true)
+    })
 
     Box(modifier = modifier) {
         Image(

@@ -51,8 +51,7 @@ fun Signup(service: FireStore, nav: NavController, authViewModel: Authentication
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        OutlinedTextField(
-            value = email.value,
+        OutlinedTextField(value = email.value,
             onValueChange = { newText -> email.value = newText },
             label = { Text("Email") },
             modifier = Modifier
@@ -66,8 +65,7 @@ fun Signup(service: FireStore, nav: NavController, authViewModel: Authentication
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        OutlinedTextField(
-            value = password.value,
+        OutlinedTextField(value = password.value,
             onValueChange = { newText -> password.value = newText },
             label = { Text("Password") },
             modifier = Modifier
@@ -97,8 +95,7 @@ fun Signup(service: FireStore, nav: NavController, authViewModel: Authentication
                         contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
                     )
                 }
-            }
-        )
+            })
 
         Spacer(modifier = Modifier.height(16.dp))
 

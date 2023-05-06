@@ -20,8 +20,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MyBikeView(
-    service: FireStore,
-    nav: NavController
+    service: FireStore, nav: NavController
 ) {
     val bikeId = nav.currentBackStackEntry?.arguments?.getString("bikeId")
     val bike = remember { mutableStateOf<Bike?>(null) }
@@ -31,8 +30,7 @@ fun MyBikeView(
     var showConfirmationDialog by remember { mutableStateOf(false) }
 
     if (showConfirmationDialog) {
-        AlertDialog(
-            onDismissRequest = { showConfirmationDialog = false },
+        AlertDialog(onDismissRequest = { showConfirmationDialog = false },
             title = { Text(text = "Delete bike") },
             text = {
                 Text(
@@ -60,8 +58,7 @@ fun MyBikeView(
                 }) {
                     Text(text = "Cancel")
                 }
-            }
-        )
+            })
     }
 
     Box(
@@ -87,41 +84,36 @@ fun MyBikeView(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = it.name,
-                    style = MaterialTheme.typography.h4
+                    text = it.name, style = MaterialTheme.typography.h4
                 )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Registered to be at: ${it.address}",
+                    style = MaterialTheme.typography.body1
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Description: ${it.description}", style = MaterialTheme.typography.body1
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Distance: ${it.distance}", style = MaterialTheme.typography.body1
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                if (it.rentedOut) {
                     Text(
-                        text = "Registered to be at: ${it.address}",
-                        style = MaterialTheme.typography.body1
+                        text = "Status: Currently rented out",
+                        style = MaterialTheme.typography.body1,
+                        color = Color.Red
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                } else {
                     Text(
-                        text = "Description: ${it.description}",
-                        style = MaterialTheme.typography.body1
+                        text = "Status: Available to rent out",
+                        style = MaterialTheme.typography.body1,
+                        color = Color.Green
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Distance: ${it.distance}",
-                        style = MaterialTheme.typography.body1
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    if (it.rentedOut)
-                    {
-                        Text(
-                            text = "Status: Currently rented out",
-                            style = MaterialTheme.typography.body1,
-                            color = Color.Red
-                        )
-                    }
-                    else {
-                        Text(
-                            text = "Status: Available to rent out",
-                            style = MaterialTheme.typography.body1,
-                            color = Color.Green
-                        )
-                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(
@@ -130,8 +122,7 @@ fun MyBikeView(
                     Button(
                         onClick = {
                             showConfirmationDialog = true
-                        },
-                        modifier = Modifier.weight(1f)
+                        }, modifier = Modifier.weight(1f)
                     ) {
                         Text(text = "Delete")
                     }
@@ -139,8 +130,7 @@ fun MyBikeView(
                     Button(
                         onClick = {
                             nav.navigate("EditBikeView/${it.id}")
-                        },
-                        modifier = Modifier.weight(1f)
+                        }, modifier = Modifier.weight(1f)
                     ) {
                         Text(text = "Edit")
                     }

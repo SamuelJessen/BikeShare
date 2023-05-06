@@ -39,9 +39,7 @@ fun MyBikeListItem(bike: Bike, nav: NavController) {
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
-                text = bike.name,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.h6
+                text = bike.name, textAlign = TextAlign.Center, style = MaterialTheme.typography.h6
             )
         }
     }
