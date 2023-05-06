@@ -22,15 +22,13 @@ import androidx.navigation.NavController
 import com.LaursenJessen.bikeshare.services.firestore.FireStore
 import com.LaursenJessen.bikeshare.services.firestore.models.Bike
 
-
 @Composable
 fun MyBikesView(service: FireStore, nav: NavController) {
     val bikes = remember { mutableStateOf(emptyList<Bike>()) }
     val listState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
-        val list = service.getBikes()
-        bikes.value = list
+        bikes.value = service.getBikes()
     }
 
     LaunchedEffect(Unit) {
