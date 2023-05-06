@@ -36,7 +36,7 @@ fun MyBikesView(service: FireStore, nav: NavController) {
     }
 
     val bikesForUser = bikes.value.filter { it.userId == service.auth.uid }
-    
+
     Column(modifier = Modifier.padding(horizontal = 5.dp, vertical = 5.dp)) {
         Card(
             modifier = Modifier
@@ -55,11 +55,18 @@ fun MyBikesView(service: FireStore, nav: NavController) {
                     color = MaterialTheme.colors.background
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Icon(Icons.Filled.Add, contentDescription = "Add", modifier = Modifier.padding(17.dp))
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Add",
+                    modifier = Modifier.padding(17.dp)
+                )
             }
         }
-        LazyColumn(modifier = Modifier
-            .fillMaxSize().padding(horizontal = 0.dp), state = listState) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 0.dp), state = listState
+        ) {
             items(bikesForUser) { bike ->
                 MyBikeListItem(bike, nav)
             }

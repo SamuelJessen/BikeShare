@@ -1,16 +1,14 @@
 package com.LaursenJessen.bikeshare.components.rentOutBike.myRentals
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.LaursenJessen.bikeshare.services.firestore.FireStore
 import com.LaursenJessen.bikeshare.services.firestore.models.Rental
@@ -60,9 +58,27 @@ fun MyRentalsView(service: FireStore, nav: NavController) {
                 Text("You currently have no rentals", style = MaterialTheme.typography.h6)
             }
         } else {
-            LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
-                itemsIndexed(rentalList.value) { _, rental ->
-                    RentalListItem(rental = rental, nav = nav)
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "Rentals on your bikes",
+                        style = MaterialTheme.typography.h6,
+                        modifier = Modifier.padding(10.dp)
+                    )
+                    Button(onClick = { nav.navigate("MyBikesView") }) {
+                        Text(text = "Your bikes")
+                    }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Divider(thickness = 3.dp)
+                Spacer(modifier = Modifier.height(10.dp))
+                LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
+                    itemsIndexed(rentalList.value) { _, rental ->
+                        RentalListItem(rental = rental)
+                    }
                 }
             }
         }

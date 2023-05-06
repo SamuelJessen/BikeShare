@@ -8,14 +8,12 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class FireStore(
-    private val storage: FirebaseStorage,
     private val api: FirebaseFirestore,
     val auth: FirebaseAuth,
 ) {
@@ -26,24 +24,24 @@ class FireStore(
     suspend fun getBikes(): List<Bike> {
         return suspendCoroutine { continuation ->
             api.collection("Bikes").get().addOnSuccessListener {
-                    val bikes = it.documents.map { d ->
-                        Bike(
-                            d.id,
-                            d.data?.get("Address").toString(),
-                            d.data?.get("Description").toString(),
-                            d.data?.get("Name").toString(),
-                            d.data?.get("DailyPrice")?.toString()?.toDoubleOrNull()?.toInt() ?: 0,
-                            d.data?.get("Distance")?.toString()?.toDoubleOrNull()?.toInt() ?: 0,
-                            d.data?.get("RentedOut").toString().toBoolean(),
-                            d.data?.get("UserId").toString(),
-                            d.data?.get("ImageUrl").toString()
-                        )
-                    }
-                    continuation.resume(bikes)
-                }.addOnFailureListener { e ->
-                    Log.v(TAG, "ERROR: Could not get bikes", e)
-                    continuation.resumeWithException(e)
+                val bikes = it.documents.map { d ->
+                    Bike(
+                        d.id,
+                        d.data?.get("Address").toString(),
+                        d.data?.get("Description").toString(),
+                        d.data?.get("Name").toString(),
+                        d.data?.get("DailyPrice")?.toString()?.toDoubleOrNull()?.toInt() ?: 0,
+                        d.data?.get("Distance")?.toString()?.toDoubleOrNull()?.toInt() ?: 0,
+                        d.data?.get("RentedOut").toString().toBoolean(),
+                        d.data?.get("UserId").toString(),
+                        d.data?.get("ImageUrl").toString()
+                    )
                 }
+                continuation.resume(bikes)
+            }.addOnFailureListener { e ->
+                Log.v(TAG, "ERROR: Could not get bikes", e)
+                continuation.resumeWithException(e)
+            }
         }
     }
 
@@ -104,9 +102,7 @@ class FireStore(
 
     suspend fun getRentals(userId: String): List<Rental> {
         return suspendCoroutine { continuation ->
-            api.collection("Bikes")
-                .get()
-                .addOnSuccessListener { bikeDocuments ->
+            api.collection("Bikes").get().addOnSuccessListener { bikeDocuments ->
                     val bikeIds = bikeDocuments.mapNotNull { document ->
                         if (document.data["UserId"] == userId) {
                             document.id
@@ -119,9 +115,7 @@ class FireStore(
                     if (bikeIds.isEmpty()) {
                         continuation.resume(emptyList())
                     } else {
-                        api.collection("Rentals")
-                            .whereIn("BikeId", bikeIds)
-                            .get()
+                        api.collection("Rentals").whereIn("BikeId", bikeIds).get()
                             .addOnSuccessListener { rentalDocuments ->
                                 val rentals = rentalDocuments.mapNotNull { rentalDocument ->
                                     val bikeMap = rentalDocument.data["Bike"] as? Map<*, *>
@@ -145,8 +139,10 @@ class FireStore(
                                             rentalDocument.data["UserId"]?.toString() ?: "",
                                             rentalDocument.data["UserEmail"]?.toString() ?: "",
                                             rentalDocument.data["BikeId"]?.toString() ?: "",
-                                            rentalDocument.data["RentDurationDays"]?.toString()?.toIntOrNull() ?: 0,
-                                            rentalDocument.data["DailyPrice"]?.toString()?.toIntOrNull() ?: 0
+                                            rentalDocument.data["RentDurationDays"]?.toString()
+                                                ?.toIntOrNull() ?: 0,
+                                            rentalDocument.data["DailyPrice"]?.toString()
+                                                ?.toIntOrNull() ?: 0
                                         )
                                     }
                                 }
@@ -189,33 +185,33 @@ class FireStore(
 
     suspend fun addBike(bike: Bike) = suspendCoroutine { continuation ->
         api.collection("Bikes").document(bike.id).set(
-                mapOf(
-                    "Address" to bike.address,
-                    "Description" to bike.description,
-                    "Name" to bike.name,
-                    "DailyPrice" to bike.dailyPrice,
-                    "Distance" to bike.distance,
-                    "RentedOut" to bike.rentedOut,
-                    "UserId" to bike.userId,
-                    "ImageUrl" to bike.imageUrl
-                )
-            ).addOnSuccessListener {
-                Log.d(TAG, "Bike added successfully")
-                continuation.resume(Unit)
-            }.addOnFailureListener { e ->
-                Log.w(TAG, "Error adding bike", e)
-                continuation.resumeWithException(e)
-            }
+            mapOf(
+                "Address" to bike.address,
+                "Description" to bike.description,
+                "Name" to bike.name,
+                "DailyPrice" to bike.dailyPrice,
+                "Distance" to bike.distance,
+                "RentedOut" to bike.rentedOut,
+                "UserId" to bike.userId,
+                "ImageUrl" to bike.imageUrl
+            )
+        ).addOnSuccessListener {
+            Log.d(TAG, "Bike added successfully")
+            continuation.resume(Unit)
+        }.addOnFailureListener { e ->
+            Log.w(TAG, "Error adding bike", e)
+            continuation.resumeWithException(e)
+        }
     }
 
     suspend fun deleteBike(bikeId: String) = suspendCoroutine { continuation ->
         api.collection("Bikes").document(bikeId).delete().addOnSuccessListener {
-                Log.d(TAG, "Bike deleted successfully")
-                continuation.resume(Unit)
-            }.addOnFailureListener { e ->
-                Log.w(TAG, "Error deleting bike", e)
-                continuation.resumeWithException(e)
-            }
+            Log.d(TAG, "Bike deleted successfully")
+            continuation.resume(Unit)
+        }.addOnFailureListener { e ->
+            Log.w(TAG, "Error deleting bike", e)
+            continuation.resumeWithException(e)
+        }
     }
 
     suspend fun updateBikeRentedStatus(bikeId: String, rentedOut: Boolean) =
@@ -233,36 +229,36 @@ class FireStore(
     suspend fun signup(email: String, password: String) {
         suspendCoroutine { continuation ->
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d(TAG, "createUserWithEmail:success")
-                        val user = auth.currentUser ?: throw Exception("Something wrong")
-                        val signedInUser = user.email?.let { User(user.providerId, it) }
-                            ?: throw Exception("createUserWithEmail:$email failure")
-                        continuation.resume(signedInUser)
-                    } else {
-                        Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        throw throw Exception("createUserWithEmail: $email failure", task.exception)
-                    }
+                if (task.isSuccessful) {
+                    Log.d(TAG, "createUserWithEmail:success")
+                    val user = auth.currentUser ?: throw Exception("Something wrong")
+                    val signedInUser = user.email?.let { User(user.providerId, it) }
+                        ?: throw Exception("createUserWithEmail:$email failure")
+                    continuation.resume(signedInUser)
+                } else {
+                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                    throw throw Exception("createUserWithEmail: $email failure", task.exception)
                 }
+            }
         }
     }
 
     suspend fun login(email: String, password: String): User {
         return suspendCoroutine { continuation ->
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d(TAG, "createUserWithEmail:success")
-                        val user = auth.currentUser ?: throw Exception("Something wrong")
-                        val signedInUser = user.email?.let { User(user.providerId, it) }
-                            ?: throw Exception("createUserWithEmail:$email failure")
-                        continuation.resume(signedInUser)
-                    } else {
-                        Log.w(TAG, "loginUserWithEmail:failure", task.exception)
-                        continuation.resumeWithException(
-                            task.exception ?: Exception("Unknown error")
-                        )
-                    }
+                if (task.isSuccessful) {
+                    Log.d(TAG, "createUserWithEmail:success")
+                    val user = auth.currentUser ?: throw Exception("Something wrong")
+                    val signedInUser = user.email?.let { User(user.providerId, it) }
+                        ?: throw Exception("createUserWithEmail:$email failure")
+                    continuation.resume(signedInUser)
+                } else {
+                    Log.w(TAG, "loginUserWithEmail:failure", task.exception)
+                    continuation.resumeWithException(
+                        task.exception ?: Exception("Unknown error")
+                    )
                 }
+            }
         }
     }
 }
