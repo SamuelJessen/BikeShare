@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsBike
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -15,10 +19,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.LaursenJessen.bikeshare.authenticationStateViewModel.AuthenticationViewModel
+import com.LaursenJessen.bikeshare.navigation.authenticationStateViewModel.AuthenticationViewModel
+import com.LaursenJessen.bikeshare.services.firestore.FireStore
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -26,6 +31,7 @@ import kotlinx.coroutines.launch
 fun Login(service: FireStore, nav: NavController, authViewModel: AuthenticationViewModel) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val (isPasswordVisible, setPasswordVisible) = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
@@ -35,8 +41,8 @@ fun Login(service: FireStore, nav: NavController, authViewModel: AuthenticationV
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.Center,
+            .padding(horizontal = 16.dp, vertical = 80.dp),
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -56,7 +62,7 @@ fun Login(service: FireStore, nav: NavController, authViewModel: AuthenticationV
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next, keyboardType = KeyboardType.Email
             ),
-            keyboardActions = KeyboardActions(onNext = { passwordFocusRequester.requestFocus() }) // Move focus to the password field
+            keyboardActions = KeyboardActions(onNext = { passwordFocusRequester.requestFocus() })
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -68,7 +74,7 @@ fun Login(service: FireStore, nav: NavController, authViewModel: AuthenticationV
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(passwordFocusRequester),
-            visualTransformation = PasswordVisualTransformation(),
+            visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done, keyboardType = KeyboardType.Password
             ),
@@ -84,7 +90,15 @@ fun Login(service: FireStore, nav: NavController, authViewModel: AuthenticationV
                     }
                 }
                 keyboardController?.hide()
-            })
+            }),
+            trailingIcon = {
+                IconButton(onClick = { setPasswordVisible(!isPasswordVisible) }) {
+                    Icon(
+                        imageVector = if (isPasswordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                        contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
+                    )
+                }
+            }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -121,6 +135,15 @@ fun Login(service: FireStore, nav: NavController, authViewModel: AuthenticationV
                 modifier = Modifier.padding(vertical = 8.dp)
             )
         }
+
+        Spacer(modifier = Modifier.height(90.dp))
+        Text(text = "BikeShare", style = MaterialTheme.typography.h5)
+        Text(text = "The app for bike-lovers", style = MaterialTheme.typography.body1)
+        Icon(
+            imageVector = Icons.Filled.DirectionsBike,
+            contentDescription = "LoginBikeIcon",
+            modifier = Modifier.size(100.dp)
+        )
     }
 }
 

@@ -11,14 +11,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.LaursenJessen.bikeshare.authenticationStateViewModel.AuthenticationViewModel
 import com.LaursenJessen.bikeshare.components.authentication.Login
 import com.LaursenJessen.bikeshare.components.authentication.Signup
 import com.LaursenJessen.bikeshare.components.authentication.authnav.authenticatedComposable
 import com.LaursenJessen.bikeshare.components.drawermenu.ScaffoldWithMenuContent
 import com.LaursenJessen.bikeshare.components.drawermenu.providers.getMenuItems
 import com.LaursenJessen.bikeshare.components.home.HomeScreen
-import com.LaursenJessen.bikeshare.components.home.PositionService
 import com.LaursenJessen.bikeshare.components.rentBikes.BikeRentalDetails
 import com.LaursenJessen.bikeshare.components.rentBikes.RentBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.addBikes.AddBikeView
@@ -26,7 +24,9 @@ import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.MyBikesView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.myBike.EditBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.myBike.MyBikeView
 import com.LaursenJessen.bikeshare.components.rentOutBike.myRentals.MyRentalsView
-import com.LaursenJessen.bikeshare.firestore.FireStore
+import com.LaursenJessen.bikeshare.navigation.authenticationStateViewModel.AuthenticationViewModel
+import com.LaursenJessen.bikeshare.services.firestore.FireStore
+import com.LaursenJessen.bikeshare.services.position.PositionService
 import com.google.firebase.auth.FirebaseAuth
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -70,7 +70,7 @@ fun AppNavigation(
             }
             authenticatedComposable("AddBike", navController, authViewModel.isAuthenticated) {
                 ScaffoldWithMenuContent(
-                    scaffoldState, scope, menuItems, topBarText = "Add bike"
+                    scaffoldState, scope, menuItems, topBarText = "Add bike", nav = navController, showBackButton = true
                 ) { AddBikeView(nav = navController, service = service) }
             }
 
@@ -88,14 +88,14 @@ fun AppNavigation(
                 "MyBikeView/{bikeId}", navController, authViewModel.isAuthenticated
             ) {
                 ScaffoldWithMenuContent(
-                    scaffoldState, scope, menuItems, topBarText = "My bike"
+                    scaffoldState, scope, menuItems, topBarText = "My bike", nav = navController, showBackButton = true
                 ) { MyBikeView(nav = navController, service = service) }
             }
             authenticatedComposable(
                 "EditBikeView/{bikeId}", navController, authViewModel.isAuthenticated
             ) {
                 ScaffoldWithMenuContent(
-                    scaffoldState, scope, menuItems, topBarText = "Edit bike"
+                    scaffoldState, scope, menuItems, topBarText = "Edit bike", nav = navController, showBackButton = true
                 ) { EditBikeView(nav = navController, service = service) }
             }
             authenticatedComposable(

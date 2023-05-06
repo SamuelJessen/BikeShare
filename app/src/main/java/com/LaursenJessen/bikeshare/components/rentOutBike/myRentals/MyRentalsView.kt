@@ -12,8 +12,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.LaursenJessen.bikeshare.firestore.models.Rental
+import com.LaursenJessen.bikeshare.services.firestore.FireStore
+import com.LaursenJessen.bikeshare.services.firestore.models.Rental
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
@@ -57,7 +57,7 @@ fun MyRentalsView(service: FireStore, nav: NavController) {
             Box(
                 modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
             ) {
-                Text("No one wanted to rent your bikes", style = MaterialTheme.typography.h6)
+                Text("You currently have no rentals", style = MaterialTheme.typography.h6)
             }
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {

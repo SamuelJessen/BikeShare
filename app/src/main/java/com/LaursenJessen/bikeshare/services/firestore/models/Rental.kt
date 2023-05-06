@@ -1,4 +1,4 @@
-package com.LaursenJessen.bikeshare.firestore.models
+package com.LaursenJessen.bikeshare.services.firestore.models
 
 data class Rental(
     val id:String,

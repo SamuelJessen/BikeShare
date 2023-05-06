@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.firestore.models.Rental
+import com.LaursenJessen.bikeshare.services.firestore.models.Rental
 
 @Composable
 fun RentalListItem(rental: Rental, nav: NavController) {
@@ -30,7 +30,7 @@ fun RentalListItem(rental: Rental, nav: NavController) {
             Text(text = rental.bike.name, style = MaterialTheme.typography.h6)
             Text(text = "Rented by: ${rental.userEmail}", style = MaterialTheme.typography.subtitle1)
             Text(text = "Duration: ${rental.rentDurationDays} days", style = MaterialTheme.typography.subtitle1)
-            Text(text = "Price: ${rental.dailyPrice} per day", style = MaterialTheme.typography.subtitle1)
+            Text(text = "Price payed: ${rental.dailyPrice} (DKK)", style = MaterialTheme.typography.subtitle1)
         }
     }
 }

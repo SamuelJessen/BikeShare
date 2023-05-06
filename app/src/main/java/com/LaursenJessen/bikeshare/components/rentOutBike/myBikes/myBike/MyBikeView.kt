@@ -8,11 +8,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.components.rentOutBike.myBikes.BikeImageWithIconFallback
-import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.LaursenJessen.bikeshare.firestore.models.Bike
+import com.LaursenJessen.bikeshare.components.helpers.BikeImageWithIconFallback
+import com.LaursenJessen.bikeshare.services.firestore.FireStore
+import com.LaursenJessen.bikeshare.services.firestore.models.Bike
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -73,7 +74,7 @@ fun MyBikeView(
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.Start
             ) {
                 BikeImageWithIconFallback(
                     imageUrl = it.imageUrl,
@@ -89,26 +90,39 @@ fun MyBikeView(
                     text = it.name,
                     style = MaterialTheme.typography.h4
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Address: ${it.address}",
-                    style = MaterialTheme.typography.body1
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Description: ${it.description}",
-                    style = MaterialTheme.typography.body1
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Distance: ${it.distance}",
-                    style = MaterialTheme.typography.body1
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Rented Out: ${it.rentedOut}",
-                    style = MaterialTheme.typography.body1
-                )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Registered to be at: ${it.address}",
+                        style = MaterialTheme.typography.body1
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Description: ${it.description}",
+                        style = MaterialTheme.typography.body1
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Distance: ${it.distance}",
+                        style = MaterialTheme.typography.body1
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    if (it.rentedOut)
+                    {
+                        Text(
+                            text = "Status: Currently rented out",
+                            style = MaterialTheme.typography.body1,
+                            color = Color.Red
+                        )
+                    }
+                    else {
+                        Text(
+                            text = "Status: Available to rent out",
+                            style = MaterialTheme.typography.body1,
+                            color = Color.Green
+                        )
+                    }
+
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly

@@ -9,10 +9,10 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import com.LaursenJessen.bikeshare.authenticationStateViewModel.AuthenticationViewModel
-import com.LaursenJessen.bikeshare.components.home.PositionService
 import com.LaursenJessen.bikeshare.components.navigation.AppNavigation
-import com.LaursenJessen.bikeshare.firestore.FireStore
+import com.LaursenJessen.bikeshare.navigation.authenticationStateViewModel.AuthenticationViewModel
+import com.LaursenJessen.bikeshare.services.firestore.FireStore
+import com.LaursenJessen.bikeshare.services.position.PositionService
 import com.LaursenJessen.bikeshare.ui.theme.BikeShareTheme
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices

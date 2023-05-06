@@ -1,7 +1,6 @@
 package com.LaursenJessen.bikeshare.components.rentBikes
 
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -9,13 +8,14 @@ import androidx.compose.material.icons.filled.DirectionsBike
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
-import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.LaursenJessen.bikeshare.firestore.models.Bike
-import com.LaursenJessen.bikeshare.firestore.models.Rental
+import com.LaursenJessen.bikeshare.components.helpers.BikeImageWithIconFallback
+import com.LaursenJessen.bikeshare.services.firestore.FireStore
+import com.LaursenJessen.bikeshare.services.firestore.models.Bike
+import com.LaursenJessen.bikeshare.services.firestore.models.Rental
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
@@ -72,7 +72,6 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                         ) {
                             Text("Close", style = MaterialTheme.typography.body1)
                         }
-
                         Button(
                             onClick = {
                                 val rental = FirebaseAuth.getInstance().currentUser?.let {
@@ -138,18 +137,17 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                     color = Color.Red,
                 )
             }
-            if (bike.imageUrl != "null" && bike.imageUrl.isNotEmpty()) {
-                Image(
-                    painter = rememberImagePainter(bike.imageUrl),
-                    contentDescription = "Bike Image",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(vertical = 16.dp)
-                )
-            } else {
-                Text(text = "No image for this bike")
-            }
+            Spacer(modifier = Modifier.height(10.dp))
+            BikeImageWithIconFallback(
+                imageUrl = bike.imageUrl,
+                contentDescription = "Bike image",
+                modifier = Modifier
+                    .height(200.dp)
+                    .fillMaxWidth()
+                    .padding(vertical = 0.dp)
+                    .clip(MaterialTheme.shapes.medium),
+                iconSize = 120.dp
+            )
             Text(text = bike.description, style = MaterialTheme.typography.body1)
             Spacer(modifier = Modifier.height(10.dp))
             Text(
