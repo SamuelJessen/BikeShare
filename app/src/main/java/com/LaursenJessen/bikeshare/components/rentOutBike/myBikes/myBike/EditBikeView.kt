@@ -17,11 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
+import com.LaursenJessen.bikeshare.components.rentOutBike.addBikes.ImageContent
 import com.LaursenJessen.bikeshare.services.firestore.FireStore
 import com.LaursenJessen.bikeshare.services.firestore.models.Bike
-import com.LaursenJessen.bikeshare.components.rentOutBike.addBikes.ImageContent
-import com.LaursenJessen.bikeshare.firestore.FireStore
-import com.LaursenJessen.bikeshare.firestore.models.Bike
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
@@ -43,6 +41,7 @@ fun EditBikeView(service: FireStore, nav: NavController) {
     val description = remember { mutableStateOf("") }
     val rentedOut = remember { mutableStateOf(false) }
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
+    val loading = remember { mutableStateOf(false) }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
@@ -61,7 +60,7 @@ fun EditBikeView(service: FireStore, nav: NavController) {
             rentedOut.value = fetchedBike.rentedOut
             selectedImage = fetchedBike.imageUrl.toUri()
             if (selectedImage.toString() == "") {
-                selectedImage = null;
+                selectedImage = null
             }
         }
     }
@@ -77,19 +76,6 @@ fun EditBikeView(service: FireStore, nav: NavController) {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                ImageContent(selectedImage) {
-                    launcher.launch("image/*")
-                }
-                if(selectedImage != null){
-                Text(
-                    text = "Press image to change",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.caption.copy(
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colors.onBackground.copy(alpha = 0.5f)
-                    )
-                )}
                 OutlinedTextField(
                     value = name.value,
                     onValueChange = { name.value = it },
@@ -122,6 +108,20 @@ fun EditBikeView(service: FireStore, nav: NavController) {
                     label = { Text(text = "Description") },
                     modifier = Modifier.fillMaxWidth()
                 )
+                ImageContent(selectedImage) {
+                    launcher.launch("image/*")
+                }
+                if (selectedImage != null) {
+                    Text(
+                        text = "Press image to change",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.caption.copy(
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colors.onBackground.copy(alpha = 0.5f)
+                        )
+                    )
+                }
                 Row(
                     modifier = Modifier.padding(vertical = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -132,57 +132,64 @@ fun EditBikeView(service: FireStore, nav: NavController) {
                         checked = !rentedOut.value,
                         onCheckedChange = { rentedOut.value = !it },
                         modifier = Modifier.alignByBaseline(),
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.Green,
+                            checkedTrackColor = Color.Green.copy(alpha = 0.5f),
+                            uncheckedThumbColor = Color.Red,
+                            uncheckedTrackColor = Color.Red.copy(alpha = 0.5f)
+                        )
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Button(
-                        onClick = {
-                            bike?.value?.let {
-                                val updatedBike = it.copy(
-                                    name = name.value,
-                                    dailyPrice = dailyPrice.value.toDouble().toInt(),
-                                    distance = distance.value.toDouble().toInt(),
-                                    address = address.value,
-                                    description = description.value,
-                                    rentedOut = rentedOut.value,
-                                )
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    if(selectedImage != null){
-                                        val imageUrl = selectedImage?.let {
-                                            uploadImageAndGetUrl(
-                                                storage,
-                                                it,
-                                                bikeId ?: ""
-                                            )
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        if (loading.value) {
+                            CircularProgressIndicator()
+                        } else {
+                            Button(
+                                onClick = {
+                                    loading.value = true
+                                    bike.value?.let {
+                                        val updatedBike = it.copy(
+                                            name = name.value,
+                                            dailyPrice = dailyPrice.value.toDouble().toInt(),
+                                            distance = distance.value.toDouble().toInt(),
+                                            address = address.value,
+                                            description = description.value,
+                                            rentedOut = rentedOut.value,
+                                        )
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            if (selectedImage != null) {
+                                                val imageUrl = selectedImage?.let { it ->
+                                                    uploadImageAndGetUrl(
+                                                        storage, it, bikeId ?: ""
+                                                    )
+                                                }
+                                                if (imageUrl != null) {
+                                                    updatedBike.imageUrl = imageUrl
+                                                }
+                                            } else {
+                                                updatedBike.imageUrl = ""
+                                            }
+                                            service.updateBike(updatedBike)
+                                            withContext(Dispatchers.Main) {
+                                                nav.navigate("MyBikesView")
+                                                loading.value = false
+                                            }
                                         }
-                                        if (imageUrl != null) {
-                                            updatedBike.imageUrl = imageUrl
-                                        }
                                     }
-                                    else
-                                    {
-                                        updatedBike.imageUrl = ""
-                                    }
-                                    service.updateBike(updatedBike)
-                                    withContext(Dispatchers.Main) {
-                                        nav.navigate("MyBikesView")
-                                    }
-                                }
+                                },
+                            ) {
+                                Text(text = "Save Changes")
                             }
-                        },
-                    ) {
-                        Text(text = "Save Changes")
+                        }
                     }
                 }
             }
         }
     }
-
 }
 
 private suspend fun uploadImageAndGetUrl(
-    storage: FirebaseStorage,
-    selectedImage: Uri,
-    bikeId: String
+    storage: FirebaseStorage, selectedImage: Uri, bikeId: String
 ): String? {
     val imageRef = storage.reference.child("images/$bikeId")
     return try {

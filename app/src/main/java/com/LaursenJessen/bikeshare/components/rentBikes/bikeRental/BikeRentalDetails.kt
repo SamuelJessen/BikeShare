@@ -72,7 +72,6 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                         ) {
                             Text("Close", style = MaterialTheme.typography.body1)
                         }
-
                         Button(
                             onClick = {
                                 val rental = FirebaseAuth.getInstance().currentUser?.let {
@@ -138,6 +137,7 @@ fun BikeRentalDetails(nav: NavController, service: FireStore) {
                     color = Color.Red,
                 )
             }
+            Spacer(modifier = Modifier.height(10.dp))
             BikeImageWithIconFallback(
                 imageUrl = bike.imageUrl,
                 contentDescription = "Bike image",
