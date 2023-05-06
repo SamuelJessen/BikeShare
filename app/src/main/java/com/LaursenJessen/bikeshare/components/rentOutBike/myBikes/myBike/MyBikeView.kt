@@ -122,7 +122,9 @@ fun MyBikeView(
                     Button(
                         onClick = {
                             showConfirmationDialog = true
-                        }, modifier = Modifier.weight(1f)
+                        }, modifier = Modifier.weight(1f), colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.error
+                        )
                     ) {
                         Text(text = "Delete")
                     }

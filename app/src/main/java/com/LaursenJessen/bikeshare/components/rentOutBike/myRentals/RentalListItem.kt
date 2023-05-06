@@ -10,11 +10,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.LaursenJessen.bikeshare.services.firestore.models.Rental
 
 @Composable
-fun RentalListItem(rental: Rental, nav: NavController) {
+fun RentalListItem(rental: Rental) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

@@ -82,8 +82,8 @@ fun Signup(service: FireStore, nav: NavController, authViewModel: Authentication
                         authViewModel.setAuthenticated(true)
                         nav.navigate("HomeScreen")
                     } catch (e: Exception) {
-                        Log.e("Login", "Exception during login", e)
-                        errorMessage = "Log in failed: ${e.localizedMessage}"
+                        Log.e("Signup", "Exception during Signup", e)
+                        errorMessage = "Signup failed: ${e.localizedMessage}"
                     }
                 }
                 keyboardController?.hide()

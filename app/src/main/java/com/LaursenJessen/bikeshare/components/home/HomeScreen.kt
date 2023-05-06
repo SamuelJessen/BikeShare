@@ -40,7 +40,7 @@ fun HomeScreen(nav: NavController, positionService: PositionService) {
                 Icon(
                     Icons.Filled.DirectionsBike,
                     contentDescription = "HomeScreenIcon",
-                    modifier = Modifier.size(48.dp) // Adjust the size as needed
+                    modifier = Modifier.size(48.dp)
                 )
             }
             Button(
