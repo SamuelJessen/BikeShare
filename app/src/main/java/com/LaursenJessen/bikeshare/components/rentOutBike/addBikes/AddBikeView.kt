@@ -1,6 +1,7 @@
 package com.LaursenJessen.bikeshare.components.rentOutBike.addBikes
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -9,11 +10,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.services.firestore.models.Bike
 import com.LaursenJessen.bikeshare.services.firestore.FireStore
+import com.LaursenJessen.bikeshare.services.firestore.models.Bike
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,9 +80,17 @@ fun AddBikeView(service: FireStore, nav: NavController) {
             Text(text = "Available for rent")
             Spacer(modifier = Modifier.width(8.dp))
             Switch(
-                checked = !rentedOut.value,
-                onCheckedChange = { rentedOut.value = !it },
+                checked = rentedOut.value,
+                onCheckedChange = { rentedOut.value = it },
                 modifier = Modifier.alignByBaseline(),
+                enabled = true,
+                interactionSource = remember { MutableInteractionSource() },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.Green,
+                    checkedTrackColor = Color.Green.copy(alpha = 0.5f),
+                    uncheckedThumbColor = Color.Red,
+                    uncheckedTrackColor = Color.Red.copy(alpha = 0.5f)
+                )
             )
         }
 

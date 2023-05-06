@@ -30,7 +30,7 @@ fun RentalListItem(rental: Rental, nav: NavController) {
             Text(text = rental.bike.name, style = MaterialTheme.typography.h6)
             Text(text = "Rented by: ${rental.userEmail}", style = MaterialTheme.typography.subtitle1)
             Text(text = "Duration: ${rental.rentDurationDays} days", style = MaterialTheme.typography.subtitle1)
-            Text(text = "Price: ${rental.dailyPrice} per day", style = MaterialTheme.typography.subtitle1)
+            Text(text = "Price payed: ${rental.dailyPrice} (DKK)", style = MaterialTheme.typography.subtitle1)
         }
     }
 }

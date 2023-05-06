@@ -2,78 +2,137 @@ package com.LaursenJessen.bikeshare.components.authentication
 
 import android.util.Log
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.LaursenJessen.bikeshare.services.firestore.FireStore
 import com.LaursenJessen.bikeshare.navigation.authenticationStateViewModel.AuthenticationViewModel
+import com.LaursenJessen.bikeshare.services.firestore.FireStore
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Signup(service: FireStore, nav: NavController, authViewModel: AuthenticationViewModel) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val (isPasswordVisible, setPasswordVisible) = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-
-    var errorMessage by remember { mutableStateOf("") }
+    val emailFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .padding(horizontal = 16.dp, vertical = 80.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Text(
             text = "Sign up",
             style = MaterialTheme.typography.h4,
             modifier = Modifier.padding(bottom = 16.dp)
         )
+
         OutlinedTextField(
             value = email.value,
             onValueChange = { newText -> email.value = newText },
             label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(emailFocusRequester),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next, keyboardType = KeyboardType.Email
+            ),
+            keyboardActions = KeyboardActions(onNext = { passwordFocusRequester.requestFocus() })
         )
-        Spacer(modifier = Modifier.height(16.dp))
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         OutlinedTextField(
             value = password.value,
             onValueChange = { newText -> password.value = newText },
             label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(passwordFocusRequester),
+            visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done, keyboardType = KeyboardType.Password
+            ),
+            keyboardActions = KeyboardActions(onDone = {
+                scope.launch {
+                    try {
+                        service.login(email.value, password.value)
+                        authViewModel.setAuthenticated(true)
+                        nav.navigate("HomeScreen")
+                    } catch (e: Exception) {
+                        Log.e("Login", "Exception during login", e)
+                        errorMessage = "Log in failed: ${e.localizedMessage}"
+                    }
+                }
+                keyboardController?.hide()
+            }),
+            trailingIcon = {
+                IconButton(onClick = { setPasswordVisible(!isPasswordVisible) }) {
+                    Icon(
+                        imageVector = if (isPasswordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                        contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
+                    )
+                }
+            }
         )
-        Spacer(modifier = Modifier.height(32.dp))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Button(
             onClick = {
                 scope.launch {
                     try {
-                        val user = service.signup(email.value, password.value)
+                        service.signup(email.value, password.value)
                         authViewModel.setAuthenticated(true)
-                        nav.navigate("HomeScreen") {
-                            launchSingleTop = true
-                        }
+                        nav.navigate("HomeScreen")
                     } catch (e: Exception) {
-                        Log.e("Signup", "Exception during signup", e)
-                        errorMessage = "Sign up failed: ${e.localizedMessage}"
+                        Log.e("Signup", "Exception during Signup", e)
+                        errorMessage = "Signup failed: ${e.localizedMessage}"
                     }
                 }
             }, modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Sign Up")
+            Text("Sign up")
         }
-        Spacer(modifier = Modifier.height(16.dp))
+
+        Spacer(modifier = Modifier.height(5.dp))
+
         TextButton(
             onClick = { nav.navigate("Login") }, modifier = Modifier.fillMaxWidth()
         ) {
             Text("Already have an account? Log in")
+        }
+
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage.toString(),
+                color = MaterialTheme.colors.error,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
         }
     }
 }

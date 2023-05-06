@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -29,7 +30,6 @@ fun EditBikeView(service: FireStore, nav: NavController) {
     val description = remember { mutableStateOf("") }
     val rentedOut = remember { mutableStateOf(false) }
 
-    // Fetch the bike data from Firestore
     LaunchedEffect(bikeId) {
         val fetchedBike = service.getBikeById(bikeId ?: "")
         if (fetchedBike != null) {
@@ -94,6 +94,12 @@ fun EditBikeView(service: FireStore, nav: NavController) {
                 checked = !rentedOut.value,
                 onCheckedChange = { rentedOut.value = !it },
                 modifier = Modifier.alignByBaseline(),
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.Green,
+                    checkedTrackColor = Color.Green.copy(alpha = 0.5f),
+                    uncheckedThumbColor = Color.Red,
+                    uncheckedTrackColor = Color.Red.copy(alpha = 0.5f)
+                )
             )
         }
 

@@ -1,6 +1,5 @@
 package com.LaursenJessen.bikeshare.components.rentOutBike.myBikes
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -27,7 +26,6 @@ fun MyBikeListItem(bike: Bike, nav: NavController) {
         shape = MaterialTheme.shapes.medium,
         elevation = 4.dp,
     ) {
-        Log.d("Bike image url: ", bike.imageUrl)
         Row(
             modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically
         ) {
