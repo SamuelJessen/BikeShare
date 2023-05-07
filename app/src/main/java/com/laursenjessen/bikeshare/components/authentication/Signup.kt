@@ -116,7 +116,7 @@ fun Signup(service: FireStore, nav: NavController, authViewModel: Authentication
             Text("Sign up")
         }
 
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         TextButton(
             onClick = { nav.navigate("Login") }, modifier = Modifier.fillMaxWidth()

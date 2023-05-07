@@ -1,4 +1,4 @@
-package com.laursenjessen.bikeshare.components.rentOutBike.addBikes
+package com.laursenjessen.bikeshare.components.rentOutBike.myBikes.addBikes
 
 import android.net.Uri
 import android.util.Log
@@ -24,14 +24,15 @@ import com.laursenjessen.bikeshare.services.firestore.FireStore
 import com.laursenjessen.bikeshare.services.firestore.models.Bike
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.laursenjessen.bikeshare.components.rentOutBike.myBikes.ImageContent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 @Composable
 fun AddBikeView(service: FireStore, nav: NavController) {
-    val storage = Firebase.storage
     val name = remember { mutableStateOf("") }
     val dailyPrice = remember { mutableStateOf("") }
     val distance = remember { mutableStateOf("") }
@@ -135,29 +136,18 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                                         userId = service.auth.uid.toString(),
                                         imageUrl = ""
                                     )
-                                    val storageRef = storage.reference.child("images/${bike.id}")
-                                    selectedImage?.let { uri ->
-                                        storageRef.putFile(uri).addOnSuccessListener {
-                                            storageRef.downloadUrl.addOnSuccessListener { uri ->
-                                                bike.imageUrl = uri.toString()
-
-                                                CoroutineScope(Dispatchers.IO).launch {
-                                                    service.addBike(bike)
-                                                }
-                                                nav.navigate("MyBikesView")
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        selectedImage?.let { uri ->
+                                            val imageUrl = service.uploadImage(uri, bike.id)
+                                            if (imageUrl != null) {
+                                                bike.imageUrl = imageUrl
                                             }
-                                        }.addOnFailureListener { exception ->
-                                            Log.e(
-                                                "AddBikeView",
-                                                "Error uploading image to Firebase Storage: $exception"
-                                            )
                                         }
-                                    } ?: run {
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            service.addBike(bike)
+                                        service.addBike(bike)
+                                        withContext(Dispatchers.Main) {
+                                            nav.navigate("MyBikesView")
+                                            loading.value = false
                                         }
-                                        nav.navigate("MyBikesView")
-                                        loading.value = false
                                     }
                                 },
                             ) {
@@ -165,44 +155,6 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                             }
                         }
                     }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ImageContent(selectedImage: Uri? = null, onImageClick: () -> Unit) {
-    Box(
-        modifier = Modifier.height(
-            if (selectedImage != null) {
-                200.dp
-            } else {
-                80.dp
-            }
-        ), contentAlignment = Alignment.Center
-    ) {
-        Row(
-            modifier = Modifier.padding(vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (selectedImage != null) {
-                Image(painter = rememberImagePainter(selectedImage),
-                    contentDescription = "Selected Image",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            onImageClick()
-                        })
-            } else Box(
-                contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()
-            ) {
-                OutlinedButton(
-                    onClick = onImageClick, modifier = Modifier.width(200.dp)
-                ) {
-                    Text(
-                        text = "Upload bike image", fontSize = 16.sp
-                    )
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.laursenjessen.bikeshare.services.firestore
 
+import android.net.Uri
 import android.util.Log
 import com.laursenjessen.bikeshare.services.firestore.models.Bike
 import com.laursenjessen.bikeshare.services.firestore.models.Rental
@@ -8,6 +9,9 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -226,6 +230,25 @@ class FireStore(
                 }
         }
 
+    suspend fun uploadImage(selectedImage: Uri, bikeId: String): String? {
+        return suspendCoroutine { continuation ->
+            val storage = Firebase.storage
+            val imageRef = storage.reference.child("images/$bikeId")
+
+            imageRef.putFile(selectedImage).addOnSuccessListener {
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    continuation.resume(uri.toString())
+                }.addOnFailureListener { e ->
+                    Log.v(TAG, "ERROR: Could not download image URL", e)
+                    continuation.resumeWithException(e)
+                }
+            }.addOnFailureListener { e ->
+                Log.v(TAG, "ERROR: Could not upload image to Firebase Storage", e)
+                continuation.resumeWithException(e)
+            }
+        }
+    }
+
     suspend fun signup(email: String, password: String) {
         suspendCoroutine { continuation ->
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
@@ -237,7 +260,9 @@ class FireStore(
                     continuation.resume(signedInUser)
                 } else {
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    throw throw Exception("createUserWithEmail: $email failure", task.exception)
+                    continuation.resumeWithException(
+                        task.exception ?: Exception("Unknown error")
+                    )
                 }
             }
         }
