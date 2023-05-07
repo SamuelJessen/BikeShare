@@ -9,7 +9,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import com.laursenjessen.bikeshare.components.navigation.AppNavigation
+import com.laursenjessen.bikeshare.navigation.AppNavigation
 import com.laursenjessen.bikeshare.navigation.authenticationStateViewModel.AuthenticationViewModel
 import com.laursenjessen.bikeshare.services.firestore.FireStore
 import com.laursenjessen.bikeshare.services.position.PositionService

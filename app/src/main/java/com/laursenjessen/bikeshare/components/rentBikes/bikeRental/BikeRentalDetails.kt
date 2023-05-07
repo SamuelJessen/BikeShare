@@ -1,4 +1,4 @@
-package com.laursenjessen.bikeshare.components.rentBikes
+package com.laursenjessen.bikeshare.components.rentBikes.bikeRental
 
 import android.util.Log
 import androidx.compose.foundation.layout.*
@@ -12,11 +12,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.laursenjessen.bikeshare.components.helpers.BikeImageWithIconFallback
+import com.laursenjessen.bikeshare.components.helpers.bikeImageWithFallback.BikeImageWithIconFallback
 import com.laursenjessen.bikeshare.services.firestore.FireStore
 import com.laursenjessen.bikeshare.services.firestore.models.Bike
 import com.laursenjessen.bikeshare.services.firestore.models.Rental
 import com.google.firebase.auth.FirebaseAuth
+import com.laursenjessen.bikeshare.components.helpers.bikeLocation.GoogleMapsLocationButton
 import java.util.*
 
 @Composable

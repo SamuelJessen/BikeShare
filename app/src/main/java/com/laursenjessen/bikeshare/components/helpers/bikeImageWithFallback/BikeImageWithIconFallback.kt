@@ -1,4 +1,4 @@
-package com.laursenjessen.bikeshare.components.helpers
+package com.laursenjessen.bikeshare.components.helpers.bikeImageWithFallback
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

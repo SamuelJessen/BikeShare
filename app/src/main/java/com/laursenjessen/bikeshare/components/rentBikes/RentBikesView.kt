@@ -17,6 +17,7 @@ import com.laursenjessen.bikeshare.services.firestore.FireStore
 import com.laursenjessen.bikeshare.services.firestore.models.Bike
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.laursenjessen.bikeshare.components.rentBikes.bikeRental.BikeRentListItem
 import kotlinx.coroutines.launch
 
 @Composable

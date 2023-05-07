@@ -1,4 +1,4 @@
-package com.laursenjessen.bikeshare.components.navigation
+package com.laursenjessen.bikeshare.navigation
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -13,11 +13,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.laursenjessen.bikeshare.components.authentication.Login
 import com.laursenjessen.bikeshare.components.authentication.Signup
-import com.laursenjessen.bikeshare.components.authentication.authnav.authenticatedComposable
+import com.laursenjessen.bikeshare.navigation.authenticationSpecific.authenticatedComposable
 import com.laursenjessen.bikeshare.components.drawermenu.ScaffoldWithMenuContent
 import com.laursenjessen.bikeshare.components.drawermenu.providers.getMenuItems
 import com.laursenjessen.bikeshare.components.home.HomeScreen
-import com.laursenjessen.bikeshare.components.rentBikes.BikeRentalDetails
+import com.laursenjessen.bikeshare.components.rentBikes.bikeRental.BikeRentalDetails
 import com.laursenjessen.bikeshare.components.rentBikes.RentBikeView
 import com.laursenjessen.bikeshare.components.rentOutBike.myBikes.addBikes.AddBikeView
 import com.laursenjessen.bikeshare.components.rentOutBike.myBikes.MyBikesView
