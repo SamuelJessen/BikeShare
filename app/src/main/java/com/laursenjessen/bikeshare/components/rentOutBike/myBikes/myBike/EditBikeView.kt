@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.laursenjessen.bikeshare.components.rentOutBike.myBikes.ImageContent
 import com.laursenjessen.bikeshare.services.firestore.FireStore
@@ -26,7 +25,6 @@ import com.laursenjessen.bikeshare.services.firestore.models.Bike
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -159,7 +157,10 @@ fun EditBikeView(service: FireStore, nav: NavController) {
                                         CoroutineScope(Dispatchers.IO).launch {
                                             if (selectedImage != null) {
                                                 val imageUrl =
-                                                    service.uploadImage(selectedImage!!, bikeId ?: "")
+                                                    service.uploadImage(
+                                                        selectedImage!!,
+                                                        bikeId ?: ""
+                                                    )
                                                 if (imageUrl != null) {
                                                     updatedBike.imageUrl = imageUrl
                                                 }

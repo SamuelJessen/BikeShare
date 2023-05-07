@@ -1,11 +1,8 @@
 package com.laursenjessen.bikeshare.components.rentOutBike.myBikes.addBikes
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
@@ -19,12 +16,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import com.laursenjessen.bikeshare.components.rentOutBike.myBikes.ImageContent
 import com.laursenjessen.bikeshare.services.firestore.FireStore
 import com.laursenjessen.bikeshare.services.firestore.models.Bike
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import com.laursenjessen.bikeshare.components.rentOutBike.myBikes.ImageContent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,29 +52,34 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                OutlinedTextField(value = name.value,
+                OutlinedTextField(
+                    value = name.value,
                     onValueChange = { name.value = it },
                     label = { Text(text = "Name") },
                     modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(value = dailyPrice.value,
+                OutlinedTextField(
+                    value = dailyPrice.value,
                     onValueChange = { dailyPrice.value = it },
                     label = { Text(text = "Price pr day") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
                 )
-                OutlinedTextField(value = distance.value,
+                OutlinedTextField(
+                    value = distance.value,
                     onValueChange = { distance.value = it },
                     label = { Text(text = "Preliminary ride distance (km)") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
                 )
-                OutlinedTextField(value = address.value,
+                OutlinedTextField(
+                    value = address.value,
                     onValueChange = { address.value = it },
                     label = { Text(text = "Address") },
                     modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(value = description.value,
+                OutlinedTextField(
+                    value = description.value,
                     onValueChange = { description.value = it },
                     label = { Text(text = "Description") },
                     modifier = Modifier.fillMaxWidth()
