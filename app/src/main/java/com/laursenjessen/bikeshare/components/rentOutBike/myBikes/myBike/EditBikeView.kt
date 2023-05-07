@@ -29,7 +29,6 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun EditBikeView(service: FireStore, nav: NavController) {
-    val storage = Firebase.storage
     val bikeId = nav.currentBackStackEntry?.arguments?.getString("bikeId")
     val bike = remember { mutableStateOf<Bike?>(null) }
     val name = remember { mutableStateOf("") }
