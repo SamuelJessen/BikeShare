@@ -1,4 +1,4 @@
-package com.laursenjessen.bikeshare.components.authentication.authnav
+package com.laursenjessen.bikeshare.navigation.authenticationSpecific
 
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable

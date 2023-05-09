@@ -11,7 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.laursenjessen.bikeshare.components.helpers.BikeImageWithIconFallback
+import com.laursenjessen.bikeshare.components.helpers.bikeImageWithFallback.BikeImageWithIconFallback
 import com.laursenjessen.bikeshare.services.firestore.FireStore
 import com.laursenjessen.bikeshare.services.firestore.models.Bike
 import kotlinx.coroutines.CoroutineScope
@@ -44,6 +44,7 @@ fun MyBikeView(
                     CoroutineScope(Dispatchers.IO).launch {
                         if (bikeId != null) {
                             service.deleteBike(bikeId)
+                            service.deleteImage(bikeId)
                         }
                     }
                     nav.popBackStack()
@@ -109,7 +110,7 @@ fun MyBikeView(
                     )
                 } else {
                     Text(
-                        text = "Status: Available to rent out",
+                        text = "Status: Listed to be rented out",
                         style = MaterialTheme.typography.body1,
                         color = Color.Green
                     )

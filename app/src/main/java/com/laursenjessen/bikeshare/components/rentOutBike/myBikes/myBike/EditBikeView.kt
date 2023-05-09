@@ -17,21 +17,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
-import com.laursenjessen.bikeshare.components.rentOutBike.addBikes.ImageContent
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.laursenjessen.bikeshare.components.rentOutBike.myBikes.ImageContent
 import com.laursenjessen.bikeshare.services.firestore.FireStore
 import com.laursenjessen.bikeshare.services.firestore.models.Bike
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Composable
 fun EditBikeView(service: FireStore, nav: NavController) {
-    val storage = Firebase.storage
     val bikeId = nav.currentBackStackEntry?.arguments?.getString("bikeId")
     val bike = remember { mutableStateOf<Bike?>(null) }
     val name = remember { mutableStateOf("") }
@@ -158,11 +155,11 @@ fun EditBikeView(service: FireStore, nav: NavController) {
                                         )
                                         CoroutineScope(Dispatchers.IO).launch {
                                             if (selectedImage != null) {
-                                                val imageUrl = selectedImage?.let { it ->
-                                                    uploadImageAndGetUrl(
-                                                        storage, it, bikeId ?: ""
+                                                val imageUrl =
+                                                    service.uploadImage(
+                                                        selectedImage!!,
+                                                        bikeId ?: ""
                                                     )
-                                                }
                                                 if (imageUrl != null) {
                                                     updatedBike.imageUrl = imageUrl
                                                 }
@@ -185,18 +182,5 @@ fun EditBikeView(service: FireStore, nav: NavController) {
                 }
             }
         }
-    }
-}
-
-private suspend fun uploadImageAndGetUrl(
-    storage: FirebaseStorage, selectedImage: Uri, bikeId: String
-): String? {
-    val imageRef = storage.reference.child("images/$bikeId")
-    return try {
-        val uploadTask = imageRef.putFile(selectedImage)
-        uploadTask.await()
-        imageRef.downloadUrl.await().toString()
-    } catch (e: Exception) {
-        null
     }
 }

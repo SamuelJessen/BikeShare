@@ -7,7 +7,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.laursenjessen.bikeshare.components.drawermenu.models.DrawerMenuItem
 import com.laursenjessen.bikeshare.components.drawermenu.models.DrawerMenuItemModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

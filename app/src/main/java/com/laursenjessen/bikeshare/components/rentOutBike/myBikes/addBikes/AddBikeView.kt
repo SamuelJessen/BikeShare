@@ -1,11 +1,8 @@
-package com.laursenjessen.bikeshare.components.rentOutBike.addBikes
+package com.laursenjessen.bikeshare.components.rentOutBike.myBikes.addBikes
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
@@ -19,19 +16,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import com.laursenjessen.bikeshare.components.rentOutBike.myBikes.ImageContent
 import com.laursenjessen.bikeshare.services.firestore.FireStore
 import com.laursenjessen.bikeshare.services.firestore.models.Bike
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 @Composable
 fun AddBikeView(service: FireStore, nav: NavController) {
-    val storage = Firebase.storage
     val name = remember { mutableStateOf("") }
     val dailyPrice = remember { mutableStateOf("") }
     val distance = remember { mutableStateOf("") }
@@ -57,29 +52,34 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                OutlinedTextField(value = name.value,
+                OutlinedTextField(
+                    value = name.value,
                     onValueChange = { name.value = it },
                     label = { Text(text = "Name") },
                     modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(value = dailyPrice.value,
+                OutlinedTextField(
+                    value = dailyPrice.value,
                     onValueChange = { dailyPrice.value = it },
                     label = { Text(text = "Price pr day") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
                 )
-                OutlinedTextField(value = distance.value,
+                OutlinedTextField(
+                    value = distance.value,
                     onValueChange = { distance.value = it },
                     label = { Text(text = "Preliminary ride distance (km)") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
                 )
-                OutlinedTextField(value = address.value,
+                OutlinedTextField(
+                    value = address.value,
                     onValueChange = { address.value = it },
                     label = { Text(text = "Address") },
                     modifier = Modifier.fillMaxWidth()
                 )
-                OutlinedTextField(value = description.value,
+                OutlinedTextField(
+                    value = description.value,
                     onValueChange = { description.value = it },
                     label = { Text(text = "Description") },
                     modifier = Modifier.fillMaxWidth()
@@ -135,29 +135,18 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                                         userId = service.auth.uid.toString(),
                                         imageUrl = ""
                                     )
-                                    val storageRef = storage.reference.child("images/${bike.id}")
-                                    selectedImage?.let { uri ->
-                                        storageRef.putFile(uri).addOnSuccessListener {
-                                            storageRef.downloadUrl.addOnSuccessListener { uri ->
-                                                bike.imageUrl = uri.toString()
-
-                                                CoroutineScope(Dispatchers.IO).launch {
-                                                    service.addBike(bike)
-                                                }
-                                                nav.navigate("MyBikesView")
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        selectedImage?.let { uri ->
+                                            val imageUrl = service.uploadImage(uri, bike.id)
+                                            if (imageUrl != null) {
+                                                bike.imageUrl = imageUrl
                                             }
-                                        }.addOnFailureListener { exception ->
-                                            Log.e(
-                                                "AddBikeView",
-                                                "Error uploading image to Firebase Storage: $exception"
-                                            )
                                         }
-                                    } ?: run {
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            service.addBike(bike)
+                                        service.addBike(bike)
+                                        withContext(Dispatchers.Main) {
+                                            nav.navigate("MyBikesView")
+                                            loading.value = false
                                         }
-                                        nav.navigate("MyBikesView")
-                                        loading.value = false
                                     }
                                 },
                             ) {
@@ -165,44 +154,6 @@ fun AddBikeView(service: FireStore, nav: NavController) {
                             }
                         }
                     }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ImageContent(selectedImage: Uri? = null, onImageClick: () -> Unit) {
-    Box(
-        modifier = Modifier.height(
-            if (selectedImage != null) {
-                200.dp
-            } else {
-                80.dp
-            }
-        ), contentAlignment = Alignment.Center
-    ) {
-        Row(
-            modifier = Modifier.padding(vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (selectedImage != null) {
-                Image(painter = rememberImagePainter(selectedImage),
-                    contentDescription = "Selected Image",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            onImageClick()
-                        })
-            } else Box(
-                contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()
-            ) {
-                OutlinedButton(
-                    onClick = onImageClick, modifier = Modifier.width(200.dp)
-                ) {
-                    Text(
-                        text = "Upload bike image", fontSize = 16.sp
-                    )
                 }
             }
         }

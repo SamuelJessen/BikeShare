@@ -12,7 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.laursenjessen.bikeshare.components.helpers.BikeImageWithIconFallback
+import com.laursenjessen.bikeshare.components.helpers.bikeImageWithFallback.BikeImageWithIconFallback
 import com.laursenjessen.bikeshare.services.firestore.models.Bike
 
 @Composable
