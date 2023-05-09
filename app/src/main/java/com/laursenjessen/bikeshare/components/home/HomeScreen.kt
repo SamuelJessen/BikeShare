@@ -62,7 +62,7 @@ fun HomeScreen(nav: NavController, positionService: PositionService) {
                     .padding(bottom = 30.dp, end = 30.dp, start = 30.dp)
             ) {
                 Text(
-                    text = "Rent my bike", style = MaterialTheme.typography.button, fontSize = 18.sp
+                    text = "Rent out my bike", style = MaterialTheme.typography.button, fontSize = 18.sp
                 )
             }
             Spacer(modifier = Modifier.height(50.dp))

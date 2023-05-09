@@ -233,7 +233,7 @@ class FireStore(
     suspend fun uploadImage(selectedImage: Uri, bikeId: String): String? {
         return suspendCoroutine { continuation ->
             val storage = Firebase.storage
-            val imageRef = storage.reference.child("images/$bikeId")
+            val imageRef = storage.reference.child("bikeimages/$bikeId")
 
             imageRef.putFile(selectedImage).addOnSuccessListener {
                 imageRef.downloadUrl.addOnSuccessListener { uri ->
@@ -244,6 +244,20 @@ class FireStore(
                 }
             }.addOnFailureListener { e ->
                 Log.v(TAG, "ERROR: Could not upload image to Firebase Storage", e)
+                continuation.resumeWithException(e)
+            }
+        }
+    }
+
+    suspend fun deleteImage(bikeId: String) {
+        return suspendCoroutine { continuation ->
+            val storage = Firebase.storage
+            val imageRef = storage.reference.child("bikeimages/$bikeId")
+
+            imageRef.delete().addOnSuccessListener {
+                continuation.resume(Unit)
+            }.addOnFailureListener { e ->
+                Log.v(TAG, "ERROR: Could not delete image from Firebase Storage", e)
                 continuation.resumeWithException(e)
             }
         }

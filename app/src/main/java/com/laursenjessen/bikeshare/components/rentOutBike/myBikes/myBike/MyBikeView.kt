@@ -44,6 +44,7 @@ fun MyBikeView(
                     CoroutineScope(Dispatchers.IO).launch {
                         if (bikeId != null) {
                             service.deleteBike(bikeId)
+                            service.deleteImage(bikeId)
                         }
                     }
                     nav.popBackStack()
