@@ -31,10 +31,6 @@ fun MyBikesView(service: FireStore, nav: NavController) {
         bikes.value = service.getBikes()
     }
 
-    LaunchedEffect(Unit) {
-        bikes.value = service.getBikes()
-    }
-
     val bikesForUser = bikes.value.filter { it.userId == service.auth.uid }
 
     Column(modifier = Modifier.padding(horizontal = 5.dp, vertical = 5.dp)) {
