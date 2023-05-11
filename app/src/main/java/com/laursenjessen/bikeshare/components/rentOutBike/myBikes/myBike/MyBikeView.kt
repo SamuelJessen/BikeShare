@@ -110,7 +110,7 @@ fun MyBikeView(
                     )
                 } else {
                     Text(
-                        text = "Status: Listed to be rented out",
+                        text = "Status: Available for rent",
                         style = MaterialTheme.typography.body1,
                         color = Color.Green
                     )
